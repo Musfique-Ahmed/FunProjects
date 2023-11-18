@@ -45,9 +45,24 @@ discounts_1 = {
     'hair oil': 50, 
     }
 
+total = 0
+items = []
+prices = []
 a = int(input("How many items have you purchased? => "))
 b = 0
 while b < (a+1):
     item = input("Enter the item name: ")
+    items.append(item.lower())
     price = int(input("Price of the item: "))
-    
+    prices.append(price)
+price = 0
+
+print(f"Here is your purchased items with discount list: ")
+for i in range(len(items)):
+    for it, disc in discounts_1:
+        if it == item[i]:
+            print(f"Podect: {it} \n     Discount: {disc}")
+            price -= disc
+            total += price
+        price = 0
+
