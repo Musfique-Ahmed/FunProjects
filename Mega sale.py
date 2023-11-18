@@ -1,0 +1,53 @@
+discounts_1 = {
+    'pushti oil': 77, 
+    'rupchada oil': 53, 
+    'fresh milk powder': 95, 
+    'marks milk poeder': 60, 
+    'dairy milk': 30, 
+    'muri': 5, 
+    'chanacur': 20, 
+    'clegs corn flex': 200, 
+    'fresh salt': 7, 
+    'dabur honey': 80, 
+    'chinigura chal': 17,
+    'coffee': 100, 
+    'cha': 50, 
+    'surf excel': 41, 
+    'dove soap': 31, 
+    'tooth paste': 30, 
+    'dish wash liquid': 26, 
+    'diapper': 390, 
+    'tresemme shampo': 150, 
+    'vaseline': 30, 
+    'farm powder milk': 70, 
+    'tomato sauce': 99, 
+    'nutrilife jiuce': 30, 
+    'oats': 50, 
+    'shopno honey': 100, 
+    'pringles chips': 70, 
+    'aci pure toast': 10, 
+    'shorishar tel': 70, 
+    'rice brown oil': 100, 
+    'holud moricher gura': 20, 
+    'chinigura chal': 140, 
+    'nivea body lotion': 400, 
+    'nivea soft cream': 75,
+    'oliv oil': 45, 
+    'petroleum jelly': 20,
+    'baby lotion': 200, 
+    'head and shoulders shampo': 120, 
+    'pantene shampo': 120, 
+    'ponds cold cream': 20, 
+    'meril baby lotion': 30, 
+    'aci aerosol': 61, 
+    'hit aerosol': 91, 
+    'lofeboy handwash': 20, 
+    'hair oil': 50, 
+    }
+
+a = int(input("How many items have you purchased? => "))
+b = 0
+while b < (a+1):
+    item = input("Enter the item name: ")
+    price = int(input("Price of the item: "))
+    
