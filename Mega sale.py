@@ -48,13 +48,16 @@ discounts_1 = {
 total = 0
 items = []
 prices = []
-a = int(input("How many items have you purchased? => "))
+a = map(int, input("How many items have you purchased? => "))
+print(a)
 b = 0
 while b < (a+1):
+#for i in range(a):
     item = input("Enter the item name: ")
     items.append(item.lower())
     price = int(input("Price of the item: "))
     prices.append(price)
+    b += 1
 price = 0
 
 print(f"Here is your purchased items with discount list: ")
@@ -62,7 +65,9 @@ for i in range(len(items)):
     for it, disc in discounts_1:
         if it == item[i]:
             print(f"Podect: {it} \n     Discount: {disc}")
+            price = prices[i]
             price -= disc
             total += price
         price = 0
 
+ 
