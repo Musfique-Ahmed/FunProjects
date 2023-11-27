@@ -1,4 +1,4 @@
-"""def add(a, b):
+def add(a, b):
     return a + b
 
 def subtract(a, b):
@@ -8,7 +8,7 @@ def multiply(a, b):
     return a * b
 
 def divide(a, b):
-    return a / b"""
+    return a / b
 
 print("Select operation.")
 print("1.Add")
@@ -24,7 +24,7 @@ if choice>= 1 and choice<=4:
     num2 = float(input("Enter second number: "))
 
     if choice == '1':
-        print(f"Answer = {num1 + num2}")
+        print(f"Answer = {add(num1,num2)}")
 
     elif choice == '2':
         print(f"Answer = {num1 - num2}")
