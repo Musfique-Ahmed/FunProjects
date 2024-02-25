@@ -200,8 +200,8 @@ def txt():
 # Draw a heart
 heart()
 
-# Write text
-txt()
-
 # To hide turtle
 pen.ht()
+
+# Write text
+txt()
