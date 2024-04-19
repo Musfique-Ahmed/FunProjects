@@ -19,6 +19,7 @@ print("Age =", patient_age)
 print('New patient =', new_patient)
 
 
+
 # Ask some qus and print a msg
 
 name = input('What is your name? ')
