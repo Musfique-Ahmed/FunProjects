@@ -1,0 +1,82 @@
+import streamlit as st
+import pandas as pd
+import json
+
+# Assuming routines is a global variable
+routines = {}
+
+class RoutineManager:
+    def __init__(self, data_file):
+        self.data_file = data_file
+        self.load_data()
+
+    def load_data(self):
+        self.data = pd.read_csv(self.data_file)
+
+    def add_to_routine(self, routine_name, section):
+        if routine_name in routines:
+            routines[routine_name].append(section)
+            self.save_routines_to_file()
+            return True, "Section added successfully."
+        else:
+            return False, "Routine not found."
+
+    def save_routines_to_file(self, file_path="routines.json"):
+        with open(file_path, "w") as f:
+            json.dump(routines, f, indent=4)
+        return True
+
+# Initialize Streamlit app
+st.title("Routine Manager with Streamlit")
+
+# Load data
+DATA_FILE = "courses.csv"
+try:
+    manager = RoutineManager(DATA_FILE)
+except FileNotFoundError:
+    st.error(f"Could not find the file '{DATA_FILE}'. Please ensure it exists.")
+    st.stop()
+
+# Sidebar for Routine Management
+st.sidebar.header("Routine Management")
+routine_name_input = st.sidebar.text_input("Enter Routine Name:")
+if st.sidebar.button("Create Routine"):
+    if routine_name_input in routines:
+        st.sidebar.error(f"Routine '{routine_name_input}' already exists.")
+    else:
+        routines[routine_name_input] = []
+        st.sidebar.success(f"Routine '{routine_name_input}' created.")
+
+# Main section
+st.dataframe(manager.data)
+
+# Input index to select a section
+section_index = st.number_input(
+    "Enter the index of the section to add:",
+    min_value=0,
+    max_value=len(manager.data) - 1,
+    step=1,
+)
+
+# Dropdown to select a routine
+routine_to_add = st.selectbox(
+    "Select Routine to Add Section To:", options=list(routines.keys())
+)
+
+# Add section to routine
+if st.button("Add Section to Routine"):
+    if not routine_to_add:
+        st.error("Please select a routine from the dropdown.")
+    else:
+        try:
+            st.write(f"Selected section index: {section_index}")
+            st.write(f"Selected routine: {routine_to_add}")
+            section = manager.data.iloc[section_index].to_dict()
+            st.write(f"Section to add: {section}")
+            success, message = manager.add_to_routine(routine_to_add, section)
+            if success:
+                st.success(f"Section added to routine: {routine_to_add}")
+            else:
+                st.error(message)
+        except IndexError:
+            st.error("Invalid index. Please select a valid section index.")

@@ -1,0 +1,32 @@
+{
+    "my routine_2": [
+        {
+            "SL": 13,
+            "Program": "BSCSE",
+            "Course Code": "BDS 1201",
+            "Title": "History of the Emergence of Bangladesh",
+            "Section": "AK",
+            "Room1": "401",
+            "Day1": "Sun",
+            "Day2": "Wed",
+            "Time1": "01:51:PM \u2013 03:10:PM",
+            "Faculty Name": "Nazmul Huda",
+            "Faculty Initial": "NaHu",
+            "Credit": 2
+        },
+        {
+            "SL": 17,
+            "Program": "BSCSE",
+            "Course Code": "BDS 1201",
+            "Title": "History of the Emergence of Bangladesh",
+            "Section": "AO",
+            "Room1": "402",
+            "Day1": "Sat",
+            "Day2": "Tue",
+            "Time1": "11:11:AM \u2013 12:30:PM",
+            "Faculty Name": "Mosharof Hossain",
+            "Faculty Initial": "MfHn",
+            "Credit": 2
+        }
+    ]
+}
