@@ -78,7 +78,7 @@ class RoutineManager:
 
 
 def main():
-    manager = RoutineManager('Routine making app/courses.csv')
+    manager = RoutineManager('courses.csv')
 
     while True:
         print("\n--- Routine Manager CLI ---")
