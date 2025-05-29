@@ -1,0 +1,729 @@
+import React, { useState, useEffect } from 'react'; // Removed useCallback
+import { initializeApp } from 'firebase/app';
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    signInAnonymously,
+    signInWithCustomToken
+} from 'firebase/auth';
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs,
+    Timestamp
+} from 'firebase/firestore';
+
+// --- Firebase Configuration ---
+// NOTE: Replace with your actual Firebase config if you have one.
+// The __firebase_config and __initial_auth_token will be provided in the Canvas environment.
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+    apiKey: "YOUR_API_KEY", // Replace if not in Canvas
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-bloodbank-app';
+
+// --- Initialize Firebase ---
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// --- Helper: Blood Groups ---
+const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+
+// --- Main App Component ---
+function App() {
+    const [user, setUser] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const [isAuthReady, setIsAuthReady] = useState(false);
+    const [currentPage, setCurrentPage] = useState('search'); // 'auth', 'donorDashboard', 'search', 'results'
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+
+    // Donor specific states
+    const [donorDetails, setDonorDetails] = useState(null);
+    const [showDonorForm, setShowDonorForm] = useState(false);
+
+    // Search specific states
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchCriteria, setSearchCriteria] = useState(null);
+
+    // --- Firebase Auth Listener ---
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                setUser(currentUser);
+                setUserId(currentUser.uid);
+                // Fetch donor details if user is logged in
+                const donorRef = doc(db, `/artifacts/${appId}/public/data/donors`, currentUser.uid);
+                const donorSnap = await getDoc(donorRef);
+                if (donorSnap.exists()) {
+                    setDonorDetails(donorSnap.data());
+                    setCurrentPage('donorDashboard'); 
+                } else {
+                    setDonorDetails(null); // No existing donor profile
+                    setCurrentPage('donorDashboard'); // Still go to dashboard, it will prompt to create profile
+                }
+            } else {
+                // If no __initial_auth_token, sign in anonymously for searching
+                if (typeof __initial_auth_token === 'undefined' || !__initial_auth_token) { // Check if token is undefined or empty
+                    try {
+                        console.log("Attempting anonymous sign-in as __initial_auth_token is not available.");
+                        await signInAnonymously(auth);
+                        // Anonymous user is now set, onAuthStateChanged will run again
+                    } catch (anonError) {
+                        console.error("Anonymous sign-in failed:", anonError);
+                        setError("Could not initialize anonymous session. Please refresh.");
+                    }
+                } else {
+                    // This case (token exists but user is null after auth change) might indicate an issue
+                    // or just the initial state before custom token sign-in attempt completes.
+                    // For now, we keep it as is, relying on attemptCustomTokenSignIn.
+                    setUser(null);
+                    setUserId(null);
+                    setDonorDetails(null);
+                    setCurrentPage('auth'); // Prompt login/signup if not anonymous and no custom token
+                }
+            }
+            setIsAuthReady(true);
+            setLoading(false);
+        });
+
+        // Attempt custom token sign-in if available (Canvas environment)
+        const attemptCustomTokenSignIn = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                try {
+                    setLoading(true);
+                    console.log("Attempting sign-in with custom token.");
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                    // onAuthStateChanged will handle setting user and isAuthReady
+                    console.log("Custom token sign-in successful (or already signed in).");
+                } catch (e) {
+                    console.error("Custom token sign-in error:", e);
+                    setError("Failed to authenticate with custom token: " + e.message);
+                    // Fallback to anonymous or prompt login if custom token fails
+                    if (auth.currentUser) { 
+                         setUser(auth.currentUser);
+                         setUserId(auth.currentUser.uid);
+                         console.log("Already signed in (e.g. anon), using current user after custom token failure.");
+                    } else {
+                         try {
+                            console.log("Falling back to anonymous sign-in after custom token failure.");
+                            await signInAnonymously(auth);
+                         } catch (anonError) {
+                            console.error("Fallback anonymous sign-in failed:", anonError);
+                            setError("Authentication failed. Please refresh.");
+                         }
+                    }
+                    setIsAuthReady(true); // Ensure auth ready is set even on failure path
+                    setLoading(false);
+                }
+            } else {
+                 console.log("No __initial_auth_token found, proceeding with normal auth flow (onAuthStateChanged will handle anonymous).");
+                 setIsAuthReady(true); 
+            }
+        };
+
+        attemptCustomTokenSignIn();
+        return () => unsubscribe();
+    }, [appId]); // Added appId to dependency array as it's used in donorRef path
+
+
+    const handleLogout = async () => {
+        setLoading(true);
+        try {
+            await signOut(auth);
+            setUser(null);
+            setUserId(null);
+            setDonorDetails(null);
+            setCurrentPage('auth');
+            setSuccessMessage('Logged out successfully.');
+             // After logout, attempt anonymous sign-in for search functionality
+            if (typeof __initial_auth_token === 'undefined' || !__initial_auth_token) {
+                await signInAnonymously(auth);
+            }
+        } catch (e) {
+            setError('Logout failed: ' + e.message);
+        }
+        setLoading(false);
+    };
+
+    const clearMessages = () => {
+        setError('');
+        setSuccessMessage('');
+    };
+
+    const navigate = (page) => {
+        clearMessages();
+        setCurrentPage(page);
+        if (page === 'donorDashboard' && user && !donorDetails) { // Ensure user is logged in before showing form
+            setShowDonorForm(true);
+        } else if (page === 'donorDashboard' && donorDetails) {
+            setShowDonorForm(false);
+        }
+    };
+    
+    // --- LLM Call for Thank You Message ---
+    const generateThankYouMessage = async (name, bloodType, city) => {
+        const prompt = `Generate a short, encouraging, and thankful message for a blood donor named ${name} who has just registered their details with blood type ${bloodType} in ${city}. Mention the importance of their contribution. Keep it under 30 words.`;
+        let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+        const payload = { contents: chatHistory };
+        const apiKey = ""; // Using gemini-2.0-flash, no API key needed if configured by host
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("LLM API Error:", errorData);
+                throw new Error(`LLM API request failed with status ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+                return result.candidates[0].content.parts[0].text;
+            }
+            return "Thank you for your valuable contribution!"; // Fallback
+        } catch (error) {
+            console.error("Error generating thank you message:", error);
+            return `Thank you, ${name}, for registering! Your willingness to donate blood type ${bloodType} in ${city} is truly appreciated and can save lives.`; // Enhanced fallback
+        }
+    };
+
+
+    // --- Render Logic ---
+    if (!isAuthReady || loading) { // Keep loading if auth not ready OR general loading is true
+        return <LoadingSpinner />;
+    }
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-red-100 via-red-50 to-pink-100 font-sans">
+            <header className="bg-red-600 text-white p-4 shadow-lg">
+                <div className="container mx-auto flex flex-wrap items-center justify-between">
+                    <h1 className="text-2xl sm:text-3xl font-bold cursor-pointer" onClick={() => navigate(user && userId ? 'donorDashboard' : 'search')}>BloodLink Connect</h1>
+                    <nav className="flex flex-wrap items-center space-x-2 sm:space-x-4 text-sm sm:text-base">
+                        {user && userId && <span className="hidden sm:inline">Welcome, {user.displayName || user.email || 'Donor'}!</span>}
+                        {userId && <span className="text-xs px-2 py-1 bg-red-700 rounded">User ID: {userId}</span>}
+                        <button onClick={() => navigate('search')} className="hover:bg-red-700 px-3 py-2 rounded-md transition-colors">Find Blood</button>
+                        {user && userId ? ( // Check for both user object and userId
+                            <>
+                                <button onClick={() => navigate('donorDashboard')} className="hover:bg-red-700 px-3 py-2 rounded-md transition-colors">My Dashboard</button>
+                                <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 px-3 py-2 rounded-md transition-colors">Logout</button>
+                            </>
+                        ) : (
+                            <button onClick={() => navigate('auth')} className="bg-red-500 hover:bg-red-700 px-3 py-2 rounded-md transition-colors">Register/Login</button>
+                        )}
+                    </nav>
+                </div>
+            </header>
+
+            <main className="container mx-auto p-4 sm:p-6">
+                {error && <AlertMessage type="error" message={error} onClose={clearMessages} />}
+                {successMessage && <AlertMessage type="success" message={successMessage} onClose={clearMessages} />}
+
+                {currentPage === 'auth' && <AuthModule setCurrentPage={navigate} setError={setError} setLoading={setLoading} setSuccessMessage={setSuccessMessage} />}
+                
+                {currentPage === 'donorDashboard' && user && userId && ( // Check for both user object and userId
+                    <DonorDashboard 
+                        user={user} 
+                        donorDetails={donorDetails} 
+                        setDonorDetails={setDonorDetails} 
+                        setError={setError} 
+                        setLoading={setLoading}
+                        setSuccessMessage={setSuccessMessage}
+                        showDonorForm={showDonorForm}
+                        setShowDonorForm={setShowDonorForm}
+                        generateThankYouMessage={generateThankYouMessage}
+                    />
+                )}
+                {currentPage === 'donorDashboard' && (!user || !userId) && <p className="text-center text-red-700">Please log in to access your dashboard.</p>}
+
+
+                {currentPage === 'search' && (
+                    <SearchModule 
+                        setSearchResults={setSearchResults} 
+                        setCurrentPage={navigate} 
+                        setError={setError} 
+                        setLoading={setLoading}
+                        setSearchCriteria={setSearchCriteria}
+                    />
+                )}
+                {currentPage === 'results' && (
+                    <ResultsModule 
+                        results={searchResults} 
+                        searchCriteria={searchCriteria}
+                        setCurrentPage={navigate} 
+                        setError={setError}
+                    />
+                )}
+            </main>
+
+            <footer className="bg-gray-800 text-white text-center p-4 mt-8">
+                <p>&copy; {new Date().getFullYear()} BloodLink Connect. All rights reserved.</p>
+                <p className="text-xs mt-1">This platform connects donors and recipients. Verify information independently.</p>
+            </footer>
+        </div>
+    );
+}
+
+// --- Authentication Component ---
+function AuthModule({ setCurrentPage, setError, setLoading, setSuccessMessage }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setSuccessMessage('');
+        try {
+            if (isRegistering) {
+                await createUserWithEmailAndPassword(auth, email, password);
+                setSuccessMessage('Registration successful! Redirecting to dashboard...');
+                // onAuthStateChanged will redirect to dashboard after successful registration and login
+            } else {
+                await signInWithEmailAndPassword(auth, email, password);
+                setSuccessMessage('Login successful! Redirecting to dashboard...');
+                 // onAuthStateChanged will redirect
+            }
+        } catch (err) {
+            setError(err.message);
+        }
+        setLoading(false);
+    };
+
+    return (
+        <div className="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-xl shadow-2xl">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-red-700 mb-6">{isRegistering ? 'Register' : 'Login'}</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
+                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" />
+                </div>
+                <button type="submit"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                    {isRegistering ? 'Register' : 'Login'}
+                </button>
+            </form>
+            <button onClick={() => setIsRegistering(!isRegistering)}
+                    className="mt-4 text-center w-full text-sm text-red-600 hover:text-red-800">
+                {isRegistering ? 'Already have an account? Login' : "Don't have an account? Register"}
+            </button>
+        </div>
+    );
+}
+
+// --- Donor Dashboard & Form Component ---
+function DonorDashboard({ user, donorDetails, setDonorDetails, setError, setLoading, setSuccessMessage, showDonorForm, setShowDonorForm, generateThankYouMessage }) {
+    const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
+        bloodType: bloodGroups[0],
+        city: '',
+        lastDonationDate: '',
+        wantsNotifications: true,
+    });
+    const [isEditing, setIsEditing] = useState(showDonorForm); 
+
+    useEffect(() => { 
+        if (donorDetails) {
+            setFormData({
+                name: donorDetails.name || user.displayName || '',
+                phone: donorDetails.phone || '',
+                bloodType: donorDetails.bloodType || bloodGroups[0],
+                city: donorDetails.city || '',
+                lastDonationDate: donorDetails.lastDonationDate?.seconds ? new Date(donorDetails.lastDonationDate.seconds * 1000).toISOString().split('T')[0] : '',
+                wantsNotifications: donorDetails.wantsNotifications !== undefined ? donorDetails.wantsNotifications : true,
+            });
+            setIsEditing(showDonorForm); 
+        } else {
+             // If no donor details, prefill with user's display name if available, and set to editing
+            setFormData(prev => ({
+                ...prev,
+                name: user.displayName || '',
+                email: user.email || '' // email is part of user object, not form directly but good for context
+            }));
+            setIsEditing(true); 
+        }
+    }, [donorDetails, user, showDonorForm]);
+
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setSuccessMessage('');
+
+        if (!formData.name || !formData.bloodType || !formData.city || !formData.phone) {
+            setError("Name, Phone, Blood Type, and City are required.");
+            setLoading(false);
+            return;
+        }
+        
+        const donorDataToSave = {
+            ...formData,
+            userId: user.uid,
+            email: user.email, 
+            updatedAt: Timestamp.now(),
+            lastDonationDate: formData.lastDonationDate ? Timestamp.fromDate(new Date(formData.lastDonationDate)) : null,
+        };
+
+        try {
+            // Donor data is public for searching, but write access should be restricted.
+            // Path: /artifacts/{appId}/public/data/donors/{userId}
+            // Firestore security rules should ensure only the authenticated user can write to their own document.
+            // Example rule: allow write: if request.auth != null && request.auth.uid == userId;
+            const donorRef = doc(db, `/artifacts/${appId}/public/data/donors`, user.uid);
+            await setDoc(donorRef, donorDataToSave, { merge: true });
+            setDonorDetails(donorDataToSave); 
+            
+            const thankYouMsg = await generateThankYouMessage(donorDataToSave.name, donorDataToSave.bloodType, donorDataToSave.city);
+            setSuccessMessage(thankYouMsg || 'Profile updated successfully!');
+            
+            setIsEditing(false);
+            setShowDonorForm(false); 
+        } catch (err) {
+            console.error("Error saving donor details:", err);
+            setError('Failed to save profile: ' + err.message);
+        }
+        setLoading(false);
+    };
+    
+    if (!user) return <p>Please log in.</p>;
+
+    return (
+        <div className="max-w-lg mx-auto bg-white p-6 sm:p-8 rounded-xl shadow-2xl">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-red-700 mb-6">My Donor Profile</h2>
+            {isEditing ? (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" name="name" value={formData.name} onChange={handleChange} required
+                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required
+                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Blood Type</label>
+                        <select name="bloodType" value={formData.bloodType} onChange={handleChange} required
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                            {bloodGroups.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">City</label>
+                        <input type="text" name="city" value={formData.city} onChange={handleChange} required
+                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Last Donation Date (Optional)</label>
+                        <input type="date" name="lastDonationDate" value={formData.lastDonationDate} onChange={handleChange}
+                               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" />
+                    </div>
+                    <div className="flex items-center">
+                        <input type="checkbox" name="wantsNotifications" id="wantsNotifications" checked={formData.wantsNotifications} onChange={handleChange}
+                               className="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500" />
+                        <label htmlFor="wantsNotifications" className="ml-2 block text-sm text-gray-900">
+                            I agree to be contacted by email/phone if I am a potential match.
+                        </label>
+                    </div>
+                    <div className="flex space-x-3">
+                        <button type="submit"
+                                className="flex-1 w-full justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                            Save Profile
+                        </button>
+                        {donorDetails && 
+                            <button type="button" onClick={() => { setIsEditing(false); setShowDonorForm(false);}}
+                                className="flex-1 w-full justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                Cancel
+                            </button>
+                        }
+                    </div>
+                </form>
+            ) : donorDetails ? (
+                <div className="space-y-3 text-gray-700">
+                    <p><strong>Name:</strong> {donorDetails.name}</p>
+                    <p><strong>Email:</strong> {donorDetails.email}</p>
+                    <p><strong>Phone:</strong> {donorDetails.phone}</p>
+                    <p><strong>Blood Type:</strong> {donorDetails.bloodType}</p>
+                    <p><strong>City:</strong> {donorDetails.city}</p>
+                    <p><strong>Last Donated:</strong> {donorDetails.lastDonationDate?.seconds ? new Date(donorDetails.lastDonationDate.seconds * 1000).toLocaleDateString() : 'Not specified'}</p>
+                    <p><strong>Contact Consent:</strong> {donorDetails.wantsNotifications ? 'Yes' : 'No'}</p>
+                    <button onClick={() => {setIsEditing(true); setShowDonorForm(true);}}
+                            className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                        Edit Profile
+                    </button>
+                </div>
+            ) : (
+                 <div className="text-center">
+                    <p className="mb-4 text-gray-600">You haven't registered your donor details yet.</p>
+                    <button onClick={() => {setIsEditing(true); setShowDonorForm(true);}}
+                            className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                        Register as a Donor Now
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// --- Search Module ---
+function SearchModule({ setSearchResults, setCurrentPage, setError, setLoading, setSearchCriteria }) {
+    const [bloodType, setBloodType] = useState(bloodGroups[0]);
+    const [city, setCity] = useState('');
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setSearchResults([]);
+
+        if (!bloodType || !city) {
+            setError("Please select a blood type and enter a city.");
+            setLoading(false);
+            return;
+        }
+        setSearchCriteria({ bloodType, city: city.trim() }); // Trim city for search
+
+        try {
+            // IMPORTANT: Firestore Security Rules
+            // The error "Missing or insufficient permissions" means your Firestore security rules
+            // are not allowing this query. You need to configure rules in your Firebase console.
+            // For the path `/artifacts/{appId}/public/data/donors`, you generally want:
+            // 1. Public read access: Anyone (including anonymous users) should be able to read donor listings for search.
+            //    Example rule for this collection: `allow read: if true;`
+            // 2. Restricted write access: Only authenticated users should be able to create/update THEIR OWN donor profile.
+            //    Example rule for individual documents: `allow write: if request.auth != null && request.auth.uid == donorId;` (where donorId is the document ID, which is the user's UID)
+            //
+            // Check your Firebase project's Firestore security rules.
+            // A basic ruleset for this collection might look like:
+            /*
+            rules_version = '2';
+            service cloud.firestore {
+              match /databases/{database}/documents {
+                match /artifacts/{appId}/public/data/donors/{donorId} {
+                  allow read: if true; // Allows anyone to search
+                  allow write: if request.auth != null && request.auth.uid == donorId; // Allows owner to write their own document
+                }
+                // You might have other rules for other collections here
+              }
+            }
+            */
+            console.log('Current user performing search:', auth.currentUser ? auth.currentUser.uid : 'Anonymous/Unknown', auth.currentUser);
+
+            const donorsRef = collection(db, `/artifacts/${appId}/public/data/donors`);
+            const q = query(donorsRef, where("bloodType", "==", bloodType), where("city", "==", city.trim()));
+            
+            const querySnapshot = await getDocs(q);
+            const results = [];
+            querySnapshot.forEach((doc) => {
+                results.push({ id: doc.id, ...doc.data() });
+            });
+            setSearchResults(results);
+            setCurrentPage('results');
+        } catch (err) {
+            console.error("Error searching donors:", err);
+            setError('Search failed: ' + err.message + ". Please check Firestore security rules in your Firebase project console.");
+        }
+        setLoading(false);
+    };
+
+    return (
+        <div className="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-xl shadow-2xl">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-red-700 mb-6">Find a Blood Donor</h2>
+            <form onSubmit={handleSearch} className="space-y-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Blood Type Needed</label>
+                    <select value={bloodType} onChange={(e) => setBloodType(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        {bloodGroups.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+                    </select>
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">City</label>
+                    <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="Enter city name" required
+                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" />
+                </div>
+                <button type="submit"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                    Search Donors
+                </button>
+            </form>
+        </div>
+    );
+}
+
+// --- Results Module ---
+function ResultsModule({ results, searchCriteria, setCurrentPage, setError }) {
+    const [selectedDonor, setSelectedDonor] = useState(null);
+
+    const handleNotifyClick = (donor) => {
+        setError(''); // Clear previous errors
+        if (donor.wantsNotifications) {
+            setSelectedDonor(donor);
+        } else {
+            setError("This donor has not consented to be contacted directly. Please respect their privacy.");
+            setSelectedDonor(null); 
+        }
+    };
+    
+    if (!searchCriteria) {
+         return (
+            <div className="text-center p-6 bg-white rounded-xl shadow-xl">
+                <p className="text-gray-700 text-lg">Please perform a search first to see results.</p>
+                <button onClick={() => setCurrentPage('search')} className="mt-6 px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors shadow-md hover:shadow-lg">
+                    Go to Search Page
+                </button>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-red-700 mb-6">
+                Search Results for {searchCriteria.bloodType} in {searchCriteria.city}
+            </h2>
+            {results.length === 0 ? (
+                <p className="text-center text-gray-600 bg-white p-6 rounded-xl shadow-lg">No donors found matching your criteria. Please try a different search or check back later.</p>
+            ) : (
+                <div className="space-y-4">
+                    {results.map(donor => (
+                        <div key={donor.id} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg border border-red-200 hover:shadow-xl transition-shadow">
+                            <h3 className="text-xl font-semibold text-red-600">{donor.name}</h3>
+                            <p><strong>Blood Type:</strong> <span className="font-medium text-red-700">{donor.bloodType}</span></p>
+                            <p><strong>City:</strong> {donor.city}</p>
+                            <p><strong>Last Donated:</strong> {donor.lastDonationDate?.seconds ? new Date(donor.lastDonationDate.seconds * 1000).toLocaleDateString() : 'Not specified'}</p>
+                            {donor.wantsNotifications ? (
+                                <button onClick={() => handleNotifyClick(donor)}
+                                        className="mt-3 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors text-sm shadow hover:shadow-md">
+                                    Show Contact Info / Notify (Simulated)
+                                </button>
+                            ) : (
+                                <p className="mt-2 text-sm text-gray-500 italic">Donor has not consented to direct contact.</p>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {selectedDonor && (
+                <Modal onClose={() => setSelectedDonor(null)}>
+                    <h3 className="text-xl font-semibold text-red-700 mb-3">Contact Donor: {selectedDonor.name}</h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                        This donor has agreed to be contacted. Please be respectful and clear about your needs.
+                        Actual email/SMS notification would require a backend service.
+                    </p>
+                    <div className="bg-red-50 p-3 rounded-md border border-red-200">
+                        <p><strong>Email:</strong> <a href={`mailto:${selectedDonor.email}`} className="text-blue-600 hover:underline">{selectedDonor.email}</a></p>
+                        <p><strong>Phone:</strong> <a href={`tel:${selectedDonor.phone}`} className="text-blue-600 hover:underline">{selectedDonor.phone}</a></p>
+                    </div>
+                     <p className="text-xs text-gray-500 mt-4">
+                        Note: This is a simulation. In a real application, an email/SMS might be sent, or you would contact them directly using the details above.
+                    </p>
+                </Modal>
+            )}
+            <button onClick={() => setCurrentPage('search')} className="mt-8 block mx-auto px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors shadow hover:shadow-md">
+                New Search
+            </button>
+        </div>
+    );
+}
+
+// --- Utility Components ---
+function LoadingSpinner() {
+    return (
+        <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex flex-col items-center justify-center z-50 backdrop-blur-sm">
+            <div className="animate-spin rounded-full h-16 w-16 sm:h-20 sm:w-20 border-t-4 border-b-4 border-red-500"></div>
+            <p className="mt-4 text-white text-lg font-semibold">Loading, please wait...</p>
+        </div>
+    );
+}
+
+function AlertMessage({ type, message, onClose }) {
+    const baseClasses = "border-l-4 p-4 rounded-md shadow-lg mb-6";
+    const typeClasses = type === 'error' 
+        ? 'bg-red-100 border-red-600 text-red-800' 
+        : 'bg-green-100 border-green-600 text-green-800';
+    const Icon = type === 'error' ? (
+        <svg className="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    ) : (
+        <svg className="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    );
+
+    return (
+        <div className={`${baseClasses} ${typeClasses}`} role="alert">
+            <div className="flex items-center">
+                {Icon}
+                <div className="flex-grow">
+                    <p className="font-bold text-lg">{type === 'error' ? 'Error Occurred' : 'Success!'}</p>
+                    <p className="text-sm">{message}</p>
+                </div>
+                <button onClick={onClose} className="ml-auto -mx-1.5 -my-1.5 bg-transparent rounded-lg focus:ring-2 focus:ring-opacity-50 p-1.5 inline-flex h-8 w-8" 
+                        aria-label="Dismiss"
+                        style={type === 'error' ? {color: 'rgb(185 28 28)', focusRing: 'ring-red-400'} : {color: 'rgb(22 101 52)', focusRing: 'ring-green-400'}}>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function Modal({ children, onClose }) {
+    // Handle Escape key to close modal
+    useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.keyCode === 27) {
+                onClose();
+            }
+        };
+        window.addEventListener('keydown', handleEsc);
+        return () => {
+            window.removeEventListener('keydown', handleEsc);
+        };
+    }, [onClose]);
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm" onClick={onClose}>
+            <div className="bg-white p-6 rounded-xl shadow-2xl max-w-lg w-full transform transition-all" onClick={e => e.stopPropagation()}>
+                {children}
+                <button onClick={onClose} className="mt-6 w-full py-2.5 px-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                    Close
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default App;
+

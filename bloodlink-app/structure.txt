@@ -1,0 +1,17 @@
+bloodlink-app/
+├── node_modules/      # Where your installed packages (libraries) live
+├── public/            # Static assets
+│   └── index.html     # The main HTML page for your app
+│   └── vite.svg       # Example asset (you can remove)
+├── src/               # Your React application's source code
+│   ├── assets/        # Example assets like images (e.g., react.svg)
+│   ├── App.css        # CSS for the main App component
+│   ├── App.jsx        # The main React App component
+│   ├── index.css      # Global CSS
+│   └── main.jsx       # The entry point of your React app
+├── .eslintrc.cjs      # ESLint configuration (for code quality)
+├── .gitignore         # Tells Git which files to ignore
+├── index.html         # (In Vite, this is at the root and is the main entry)
+├── package-lock.json  # Records exact versions of dependencies
+├── package.json       # Project metadata and dependencies
+└── vite.config.js     # Vite configuration file
