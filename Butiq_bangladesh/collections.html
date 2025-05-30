@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections - Boutiqo Bangladesh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #F9F5F0; }
+        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; color: #4A3B31; }
+        .nav-link { color: #6D5F57; transition: color 0.3s, font-weight 0.3s; }
+        .nav-link:hover { color: #D4A056; }
+        .nav-link.active { font-weight: 600; color: #4A3B31; }
+        .btn-primary { background-color: #A0522D; color: white; transition: background-color 0.3s; }
+        .btn-primary:hover { background-color: #8B4513; }
+        .btn-filter { background-color: white; border: 1px solid #D1D5DB; color: #4A3B31; transition: background-color 0.3s, color 0.3s; }
+        .btn-filter:hover, .btn-filter.active { background-color: #A0522D; color: white; border-color: #A0522D; }
+        .accent-gold { color: #D4A056; }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu { display: none; position: absolute; background-color: white; z-index: 50; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 0.375rem; }
+        .dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #6D5F57; }
+        .dropdown-menu a:hover { background-color: #F9F5F0; }
+        body { padding-top: 80px; }
+        header { height: 80px; }
+        .logo-img { max-height: 60px; width: auto; }
+        .filterDiv { display: none; } 
+        .show { display: block; } 
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center h-full">
+            <a href="index.html">
+                <img src="images/logo.jpg" alt="Boutiqo Bangladesh Logo" class="logo-img" onerror="this.onerror=null;this.src='https://placehold.co/150x60/000000/FFFFFF?text=Logo+Not+Found';">
+            </a>
+            <nav class="space-x-3 md:space-x-6 text-xs sm:text-sm md:text-base">
+                <a href="index.html" class="nav-link">Home</a>
+                <div class="relative inline-block dropdown">
+                    <a href="collections.html" class="nav-link">Collections</a> 
+                    <div class="dropdown-menu w-40 md:w-48 rounded-md">
+                        <a href="collections.html#sarees">Sarees</a>
+                        <a href="collections.html#kurtis">Kurtis</a>
+                        <a href="collections.html#dresses">Dresses</a>
+                        <a href="collections.html#new-arrivals">New Arrivals</a>
+                    </div>
+                </div>
+                <a href="lookbook.html" class="nav-link">Lookbook</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="how-to-order.html" class="nav-link">How to Order</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <h1 class="text-4xl md:text-5xl font-playfair text-center mb-12">Our Collections at Boutiqo Bangladesh</h1>
+
+        <div id="filterButtonsContainer" class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-12">
+            <button class="btn-filter py-2 px-4 rounded-md text-sm sm:text-base mb-2 sm:mb-0" onclick="filterSelection('all', this)">All</button>
+            <button class="btn-filter py-2 px-4 rounded-md text-sm sm:text-base mb-2 sm:mb-0" onclick="filterSelection('sarees', this)">Sarees</button>
+            <button class="btn-filter py-2 px-4 rounded-md text-sm sm:text-base mb-2 sm:mb-0" onclick="filterSelection('kurtis', this)">Kurtis</button>
+            <button class="btn-filter py-2 px-4 rounded-md text-sm sm:text-base mb-2 sm:mb-0" onclick="filterSelection('dresses', this)">Dresses</button>
+            <button class="btn-filter py-2 px-4 rounded-md text-sm sm:text-base mb-2 sm:mb-0" onclick="filterSelection('new-arrivals', this)">New Arrivals</button>
+        </div>
+
+        <section id="sarees" class="mb-16 filterDiv sarees">
+            <h2 class="text-3xl font-playfair mb-8">Sarees from Boutiqo Bangladesh</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/8.jpg" alt="Elegant Black Tiered Saree from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/A0522D/FFFFFF?text=Saree+1';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Midnight Bloom Saree</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: SR001</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                     <a href="product-detail.html">
+                        <img src="images/10.jpg" alt="Ethereal White Saree from Boutiqo Bangladesh" class="w-full h-96 object-cover object-position-top group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/D4A056/4A3B31?text=Saree+2';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Moonlit Silk Saree</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: SR002</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                     <a href="product-detail.html">
+                        <img src="images/11.jpg" alt="Golden Weave Saree from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/E1C16E/4A3B31?text=Saree+3';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Golden Brocade Saree</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: SR003</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kurtis" class="mb-16 filterDiv kurtis">
+            <h2 class="text-3xl font-playfair mb-8">Kurtis from Boutiqo Bangladesh</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/kurti-1.jpg" alt="Azure Bloom Kurti from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/A0522D/FFFFFF?text=Kurti+1';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Azure Bloom Kurti</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: KU001</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/kurti-2.jpg" alt="Rose Petal Kurti from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/D4A056/4A3B31?text=Kurti+2';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Rose Petal Kurti</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: KU002</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/kurti-3.jpg" alt="Indigo Charm Kurti Set from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/E1C16E/4A3B31?text=Kurti+3';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Indigo Charm Kurti Set</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: KU003</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/kurti-4.jpg" alt="Crimson Tide Kurti from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/A0522D/FFFFFF?text=Kurti+4';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Crimson Tide Kurti</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: KU004</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dresses" class="mb-16 filterDiv dresses">
+            <h2 class="text-3xl font-playfair mb-8">Dresses from Boutiqo Bangladesh</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/9.jpg" alt="Daisy Dream Dress from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/D4A056/4A3B31?text=Dress+1';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Daisy Dream Dress</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: DR001</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/12.jpg" alt="Garden Party Dress from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/E1C16E/4A3B31?text=Dress+2';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Garden Party Dress</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: DR002</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/7.jpg" alt="Sky Blue Day Dress from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/A0522D/FFFFFF?text=Dress+3';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Sky Blue Day Dress</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: DR003</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/3.jpg" alt="Ruby Sparkle Gown from Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/D4A056/4A3B31?text=Dress+4';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Ruby Sparkle Gown</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: DR004</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="new-arrivals" class="mb-16 filterDiv new-arrivals">
+            <h2 class="text-3xl font-playfair mb-8">All New Arrivals from Boutiqo Bangladesh</h2>
+             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/5.jpg" alt="Tropical Print Set - New Arrival at Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/E1C16E/4A3B31?text=New+Arrival+1';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Tropical Print Set</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: NA001</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/6.jpg" alt="Luxe Satin Skirt - New Arrival at Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/D4A056/4A3B31?text=New+Arrival+2';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Luxe Satin Skirt</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: NA002</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <a href="product-detail.html">
+                        <img src="images/2.jpg" alt="Starry Night Ensemble - New Arrival at Boutiqo Bangladesh" class="w-full h-96 object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x500/A0522D/FFFFFF?text=New+Arrival+3';">
+                    </a>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-stone-800 mb-1">Starry Night Ensemble</h3>
+                        <p class="text-sm text-stone-600 mb-2">Item Code: NA003</p>
+                        <p class="text-lg font-semibold accent-gold mb-3">Contact for Price</p>
+                        <a href="product-detail.html" class="block text-center btn-secondary border-2 py-2 px-4 rounded-md font-semibold w-full">View Details</a>
+                    </div>
+                </div>
+                 </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-4">
+                <a href="https://www.facebook.com/Boutiqo.Bangladesh" target="_blank" class="text-2xl mx-2 hover:text-amber-500 transition-colors">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 inline-block" viewBox="0 0 24 24">
+                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                    </svg>
+                </a>
+                 <a href="#" class="text-2xl mx-2 hover:text-amber-500 transition-colors"> <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 inline-block" viewBox="0 0 24 24">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                    </svg>
+                </a>
+            </div>
+            <p class="text-sm">© <span id="currentYearCollections"></span> Boutiqo Bangladesh. All Rights Reserved.</p>
+            <p class="text-xs mt-1">Designed with care for Boutiqo Bangladesh</p>
+             <div class="mt-2 text-xs">
+                <a href="privacy.html" class="hover:text-amber-500 mx-1">Privacy Policy</a> | <a href="terms.html" class="hover:text-amber-500 mx-1">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('header nav a.nav-link');
+
+            navLinks.forEach(link => {
+                let linkPage = link.getAttribute('href').split('/').pop();
+                if (linkPage === "") linkPage = "index.html"; 
+
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                    if (link.getAttribute('href') === 'collections.html') {
+                        link.classList.add('active');
+                    }
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            if (currentPage === 'collections.html') {
+                const collectionsLink = document.querySelector('header nav a.nav-link[href="collections.html"]');
+                if (collectionsLink) collectionsLink.classList.add('active');
+            }
+
+
+            var currentFilter = "all"; 
+            var buttonsContainer = document.getElementById('filterButtonsContainer');
+            
+            if (!buttonsContainer) {
+                console.error("Filter buttons container not found on DOMContentLoaded!");
+                var yearSpan = document.getElementById('currentYearCollections');
+                if (yearSpan) {
+                    yearSpan.textContent = new Date().getFullYear();
+                }
+                return; 
+            }
+            var buttons = buttonsContainer.getElementsByClassName('btn-filter');
+
+            if (window.location.hash) {
+                var hash = window.location.hash.substring(1); 
+                var validFilters = ["sarees", "kurtis", "dresses", "new-arrivals", "all"];
+                if (validFilters.includes(hash)) {
+                    currentFilter = hash;
+                }
+            }
+
+            for (let i = 0; i < buttons.length; i++) {
+                if (buttons[i] && buttons[i].classList) { 
+                    buttons[i].classList.remove('active'); 
+                }
+            }
+            for (let i = 0; i < buttons.length; i++) {
+                const onclickAttr = buttons[i].getAttribute('onclick');
+                if (onclickAttr && onclickAttr.includes("filterSelection('" + currentFilter + "'")) {
+                    if (buttons[i] && buttons[i].classList) { 
+                        buttons[i].classList.add('active');
+                    }
+                    break; 
+                }
+            }
+            
+            filterSelection(currentFilter, null); 
+
+            var yearSpanFooter = document.getElementById('currentYearCollections'); 
+            if (yearSpanFooter) {
+                yearSpanFooter.textContent = new Date().getFullYear();
+            }
+        });
+
+        function filterSelection(c, clickedBtn) { 
+          var x, i;
+          x = document.getElementsByClassName("filterDiv");
+          var effectiveFilter = (c === "all") ? "" : c;
+          
+          for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show"); 
+            if (effectiveFilter === "" || x[i].className.indexOf(effectiveFilter) > -1) {
+              w3AddClass(x[i], "show"); 
+            }
+          }
+          
+          if (clickedBtn && clickedBtn.classList) { 
+            var btnContainer = document.getElementById("filterButtonsContainer");
+            if (btnContainer) {
+                var btns = btnContainer.getElementsByClassName("btn-filter");
+                for (var j = 0; j < btns.length; j++) {
+                    if (btns[j] && btns[j].classList) { 
+                        btns[j].classList.remove("active");
+                    }
+                }
+                clickedBtn.classList.add("active");
+            }
+          }
+        }
+
+        function w3AddClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {
+              element.className += " " + arr2[i];
+            }
+          }
+        }
+
+        function w3RemoveClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+              arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+          }
+          element.className = arr1.join(" ");
+        }
+    </script>
+</body>
+</html>

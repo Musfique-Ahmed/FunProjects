@@ -1,10 +1,6 @@
 // src/App.jsx
 import React, { useState, useEffect } from 'react';
-// Import auth, db, and appId from your firebaseConfig.js file
-// Make sure src/firebaseConfig.js exists and is correctly configured with YOUR Firebase project details.
-import { auth, db, appId } from './firebaseConfig';
-
-// Firebase SDK functions your App component will need
+import { auth, db, appId } from './firebaseConfig'; // Ensure this path is correct and file is configured
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -25,14 +21,10 @@ import {
 } from 'firebase/firestore';
 
 // Import child components from the src/components/ folder
-// Ensure you create these files and their content in Step 6.3
 import AuthModule from './components/AuthModule';
 import DonorDashboard from './components/DonorDashboard';
 import SearchModule from './components/SearchModule';
 import ResultsModule from './components/ResultsModule';
-
-// Global CSS (Vite includes this, you can customize or remove if not needed)
-// import './App.css'; // If you have specific styles in App.css
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -40,138 +32,133 @@ function App() {
     const [user, setUser] = useState(null);
     const [userId, setUserId] = useState(null);
     const [isAuthReady, setIsAuthReady] = useState(false);
-    const [currentPage, setCurrentPage] = useState('search'); // 'auth', 'donorDashboard', 'search', 'results'
-    const [loading, setLoading] = useState(false); // General loading state for async operations
+    const [currentPage, setCurrentPage] = useState('search');
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Donor specific states
     const [donorDetails, setDonorDetails] = useState(null);
-    const [showDonorForm, setShowDonorForm] = useState(false); // To control visibility of donor form on dashboard
+    const [showDonorForm, setShowDonorForm] = useState(false);
 
-    // Search specific states
     const [searchResults, setSearchResults] = useState([]);
     const [searchCriteria, setSearchCriteria] = useState(null);
-
-    // --- Firebase Auth Listener ---
-    useEffect(() => {
-        setLoading(true); // Start loading when auth state is being checked
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            if (currentUser) {
-                setUser(currentUser);
-                setUserId(currentUser.uid);
-                // Fetch donor details if user is logged in
-                // Ensure 'appId' imported from firebaseConfig.js is the correct one for your path structure
-                const donorRef = doc(db, `/artifacts/${appId}/public/data/donors`, currentUser.uid);
-                try {
-                    const donorSnap = await getDoc(donorRef);
-                    if (donorSnap.exists()) {
-                        setDonorDetails(donorSnap.data());
-                        setCurrentPage('donorDashboard');
-                    } else {
-                        setDonorDetails(null); // No existing donor profile
-                        setCurrentPage('donorDashboard'); // Still go to dashboard, it will prompt to create profile
-                        setShowDonorForm(true); // Prompt to create profile
-                    }
-                } catch (dbError) {
-                    console.error("Error fetching donor details:", dbError);
-                    setError("Could not fetch your profile data. Please try again later.");
-                    setCurrentPage('donorDashboard'); // Go to dashboard, but show error
-                }
-            } else {
-                // Handle case where __initial_auth_token might be used in a Canvas-like environment (not typical for local Vite dev)
-                // For local Vite dev, this usually means user is logged out or not yet logged in.
-                // The __initial_auth_token variable won't be defined in a standard local Vite setup.
-                const localInitialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-                if (!localInitialAuthToken) {
-                    try {
-                        console.log("Attempting anonymous sign-in as no user is authenticated and no initial token.");
-                        await signInAnonymously(auth);
-                        // onAuthStateChanged will run again with the anonymous user
-                    } catch (anonError) {
-                        console.error("Anonymous sign-in failed:", anonError);
-                        setError("Could not initialize guest session. Please refresh.");
-                    }
-                } else {
-                    // This block is more relevant for Canvas environment with __initial_auth_token
-                    setUser(null);
-                    setUserId(null);
-                    setDonorDetails(null);
-                    setCurrentPage('auth'); // Prompt login/signup
-                }
-            }
-            setIsAuthReady(true);
-            setLoading(false); // Stop loading once auth state is resolved
-        });
-
-        // This part is for Canvas environment, might not be directly applicable for local Vite
-        // unless you are passing a token through some other means.
-        const attemptCustomTokenSignIn = async () => {
-            const localInitialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-            if (localInitialAuthToken && !auth.currentUser) {
-                try {
-                    setLoading(true);
-                    console.log("Attempting sign-in with custom token (local dev context).");
-                    await signInWithCustomToken(auth, localInitialAuthToken);
-                    console.log("Custom token sign-in successful (local dev context).");
-                } catch (e) {
-                    console.error("Custom token sign-in error (local dev context):", e);
-                    setError("Failed to authenticate with custom token: " + e.message);
-                    if (!auth.currentUser) { // If still no user, attempt anonymous
-                        try {
-                            await signInAnonymously(auth);
-                        } catch (anonError) {
-                             console.error("Fallback anonymous sign-in failed:", anonError);
-                        }
-                    }
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
-        const localInitialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        if (localInitialAuthToken) { // Check if the token exists before attempting
-            attemptCustomTokenSignIn();
-        }
-
-
-        return () => unsubscribe();
-    }, [appId]); // appId dependency if it's used in paths and could change (though usually static from config)
-
-    const handleLogout = async () => {
-        setLoading(true);
-        try {
-            await signOut(auth);
-            setUser(null);
-            setUserId(null);
-            setDonorDetails(null);
-            setSuccessMessage('Logged out successfully. You can still search as a guest.');
-            setCurrentPage('search'); // Go to search page after logout
-            // Ensure anonymous session for guest searching
-            if (!auth.currentUser) {
-                await signInAnonymously(auth);
-            }
-        } catch (e) {
-            console.error('Logout failed:', e);
-            setError('Logout failed: ' + e.message);
-        }
-        setLoading(false);
-    };
 
     const clearMessages = () => {
         setError('');
         setSuccessMessage('');
     };
-
+    
     const navigate = (page) => {
         clearMessages();
         setCurrentPage(page);
-        if (page === 'donorDashboard' && user && !user.isAnonymous && !donorDetails) { // Check for non-anonymous user
-            setShowDonorForm(true); // If user is logged in, on dashboard, but no details, show form
+        // Logic to show donor form if user is logged in, on dashboard, but has no details
+        if (page === 'donorDashboard' && user && !user.isAnonymous && !donorDetails) {
+            setShowDonorForm(true); 
         } else if (page === 'donorDashboard' && donorDetails) {
-            setShowDonorForm(false); // If details exist, don't auto-show form
+            setShowDonorForm(false); 
         }
+    };
+
+    useEffect(() => {
+        setLoading(true); 
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                setUser(currentUser);
+                setUserId(currentUser.uid);
+                if (!currentUser.isAnonymous) {
+                    const donorRef = doc(db, `/artifacts/${appId}/public/data/donors`, currentUser.uid);
+                    try {
+                        const donorSnap = await getDoc(donorRef);
+                        if (donorSnap.exists()) {
+                            setDonorDetails(donorSnap.data());
+                        } else {
+                            setDonorDetails(null); 
+                        }
+                        // If user just logged in/registered (was on auth page) or is already on dashboard, stay/go to dashboard
+                        if (currentPage === 'auth' || currentPage === 'donorDashboard') {
+                           setCurrentPage('donorDashboard');
+                           if (!donorSnap.exists()) {
+                               setShowDonorForm(true); // Prompt to create profile if it doesn't exist
+                           } else {
+                               setShowDonorForm(false);
+                           }
+                        }
+                    } catch (dbError) {
+                        console.error("Error fetching donor details:", dbError);
+                        setError("Could not fetch your profile data. Please try again later.");
+                        if (currentPage === 'auth' || currentPage === 'donorDashboard') {
+                           setCurrentPage('donorDashboard'); // Still go to dashboard but show error
+                        }
+                    }
+                } else { // User is anonymous
+                    setDonorDetails(null); // Anonymous users don't have donor profiles
+                    if (currentPage !== 'search' && currentPage !== 'results') {
+                        setCurrentPage('search'); // Default anonymous users to search page
+                    }
+                }
+            } else { // No user (logged out)
+                setUser(null);
+                setUserId(null);
+                setDonorDetails(null);
+                // Attempt anonymous sign-in for guest functionality
+                try {
+                    // Check if an anonymous session already exists to prevent multiple sign-ins if not necessary
+                    if (!auth.currentUser) { 
+                       await signInAnonymously(auth);
+                    }
+                    // onAuthStateChanged will run again with the new anonymous user
+                } catch (anonError) {
+                    console.error("Automatic anonymous sign-in failed after logout/initial load:", anonError);
+                    setError("Could not initialize guest session. Please refresh the page.");
+                }
+                // If user was on a page requiring login, redirect to search or auth
+                if (currentPage === 'donorDashboard') {
+                    setCurrentPage('auth');
+                } else if (currentPage !== 'search' && currentPage !== 'results' && currentPage !== 'auth') {
+                    setCurrentPage('search');
+                }
+            }
+            setIsAuthReady(true);
+            setLoading(false); 
+        });
+        
+        // Optional: Attempt custom token sign-in if __initial_auth_token is defined
+        // This is usually for specific environments like Canvas, not standard local dev.
+        const attemptCustomTokenSignIn = async () => {
+            const localInitialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+            if (localInitialAuthToken && !auth.currentUser) { // Only if token exists and no user is signed in
+                setLoading(true);
+                try {
+                    await signInWithCustomToken(auth, localInitialAuthToken);
+                    // onAuthStateChanged will handle the rest
+                } catch (e) {
+                    console.error("Custom token sign-in error:", e);
+                    setError("Authentication failed. Trying guest session.");
+                    if (!auth.currentUser) await signInAnonymously(auth).catch(err => console.error("Fallback anon sign-in failed", err));
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        attemptCustomTokenSignIn();
+
+        return () => unsubscribe();
+    }, [appId, currentPage]); // Added currentPage to dependencies
+
+    const handleLogout = async () => {
+        setLoading(true);
+        try {
+            const wasAnonymous = user?.isAnonymous;
+            await signOut(auth);
+            // onAuthStateChanged will handle setting user to null and then re-triggering anonymous sign-in
+            setSuccessMessage('Logged out successfully.');
+            // No need to explicitly call signInAnonymously here, onAuthStateChanged handles it.
+            // setCurrentPage('search'); // Let onAuthStateChanged redirect appropriately
+        } catch (e) {
+            console.error('Logout failed:', e);
+            setError('Logout failed: ' + e.message);
+        }
+        setLoading(false);
     };
 
     const generateThankYouMessage = async (name, bloodType, city) => {
@@ -189,9 +176,9 @@ function App() {
                 body: JSON.stringify(payload)
             });
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({})); // Gracefully handle non-JSON error response
+                const errorData = await response.json().catch(() => ({ message: "Unknown LLM API error" }));
                 console.error("LLM API Error Response:", errorData);
-                throw new Error(`LLM API request failed with status ${response.status}. ${errorData.error?.message || ''}`);
+                throw new Error(`LLM API request failed. ${errorData.error?.message || errorData.message || ''}`);
             }
             const result = await response.json();
             setLoading(false);
@@ -202,12 +189,11 @@ function App() {
         } catch (error) {
             setLoading(false);
             console.error("Error generating thank you message:", error);
-            // Provide a more user-friendly error or a robust fallback.
-            return `Thank you, ${name}, for registering! Your willingness to donate blood type ${bloodType} in ${city} is truly appreciated and can save lives. (Could not generate custom message at this time.)`;
+            return `Thank you, ${name}! Your registration as a donor of ${bloodType} blood in ${city} is highly appreciated.`; // Enhanced fallback
         }
     };
 
-    if (!isAuthReady) { // Only show loading spinner if auth is not ready
+    if (!isAuthReady) {
         return <LoadingSpinner />;
     }
 
@@ -215,14 +201,14 @@ function App() {
         <div className="min-h-screen bg-gradient-to-br from-red-100 via-red-50 to-pink-100 font-sans flex flex-col">
             <header className="bg-red-600 text-white p-4 shadow-lg sticky top-0 z-10">
                 <div className="container mx-auto flex flex-wrap items-center justify-between">
-                    <h1 className="text-2xl sm:text-3xl font-bold cursor-pointer" onClick={() => navigate(user && userId && !user.isAnonymous ? 'donorDashboard' : 'search')}>
+                    <h1 className="text-2xl sm:text-3xl font-bold cursor-pointer" onClick={() => navigate(user && !user.isAnonymous ? 'donorDashboard' : 'search')}>
                         BloodLink Connect
                     </h1>
                     <nav className="flex flex-wrap items-center space-x-2 sm:space-x-4 text-sm sm:text-base">
-                        {user && userId && !user.isAnonymous && <span className="hidden sm:inline">Welcome, {user.displayName || user.email || 'Donor'}!</span>}
+                        {user && !user.isAnonymous && <span className="hidden sm:inline">Welcome, {user.displayName || user.email || 'Donor'}!</span>}
                         {userId && <span className="text-xs px-2 py-1 bg-red-700 rounded">User ID: {userId.substring(0,8)}...</span>}
                         <button onClick={() => navigate('search')} className="hover:bg-red-700 px-3 py-2 rounded-md transition-colors">Find Blood</button>
-                        {user && userId && !user.isAnonymous ? (
+                        {user && !user.isAnonymous ? (
                             <>
                                 <button onClick={() => navigate('donorDashboard')} className="hover:bg-red-700 px-3 py-2 rounded-md transition-colors">My Dashboard</button>
                                 <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 px-3 py-2 rounded-md transition-colors">Logout</button>
@@ -234,13 +220,13 @@ function App() {
                 </div>
             </header>
 
-            <main className="container mx-auto p-4 sm:p-6 mt-4 flex-grow"> {/* flex-grow to push footer down */}
+            <main className="w-full p-4 sm:p-6 mt-4 flex-grow">
                 {error && <AlertMessage type="error" message={error} onClose={clearMessages} />}
                 {successMessage && <AlertMessage type="success" message={successMessage} onClose={clearMessages} />}
 
                 {currentPage === 'auth' && <AuthModule setCurrentPage={navigate} setError={setError} setLoading={setLoading} setSuccessMessage={setSuccessMessage} bloodGroups={bloodGroups} />}
                 
-                {currentPage === 'donorDashboard' && user && userId && !user.isAnonymous && (
+                {currentPage === 'donorDashboard' && user && !user.isAnonymous && (
                     <DonorDashboard 
                         user={user} 
                         donorDetails={donorDetails} 
@@ -251,10 +237,10 @@ function App() {
                         showDonorForm={showDonorForm}
                         setShowDonorForm={setShowDonorForm}
                         generateThankYouMessage={generateThankYouMessage}
-                        bloodGroups={bloodGroups} // Pass bloodGroups if needed by DonorDashboard
+                        bloodGroups={bloodGroups}
                     />
                 )}
-                 {currentPage === 'donorDashboard' && (!user || (user && user.isAnonymous)) && ( // Corrected condition
+                 {currentPage === 'donorDashboard' && (!user || (user && user.isAnonymous)) && (
                     <div className="text-center p-6 bg-white rounded-xl shadow-xl">
                         <p className="text-red-700 text-lg">Please register or log in to access your donor dashboard.</p>
                         <button onClick={() => navigate('auth')} className="mt-4 px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors shadow-md">
@@ -263,7 +249,6 @@ function App() {
                     </div>
                 )}
 
-
                 {currentPage === 'search' && (
                     <SearchModule 
                         setSearchResults={setSearchResults} 
@@ -271,7 +256,8 @@ function App() {
                         setError={setError} 
                         setLoading={setLoading}
                         setSearchCriteria={setSearchCriteria}
-                        bloodGroups={bloodGroups} // Pass bloodGroups if needed by SearchModule
+                        bloodGroups={bloodGroups}
+                        setSuccessMessage={setSuccessMessage}
                     />
                 )}
                 {currentPage === 'results' && (
@@ -288,12 +274,12 @@ function App() {
                 <p>&copy; {new Date().getFullYear()} BloodLink Connect. All rights reserved.</p>
                 <p className="text-xs mt-1">This platform connects donors and recipients. Verify information independently.</p>
             </footer>
-            {loading && <LoadingSpinner />} {/* General loading spinner */}
+            {loading && <LoadingSpinner />}
         </div>
     );
 }
 
-// Utility Components (can be moved to separate files in src/components/ or src/utils/ later if desired)
+// Utility Components
 function LoadingSpinner() {
     return (
         <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex flex-col items-center justify-center z-50 backdrop-blur-sm">
@@ -335,7 +321,7 @@ function AlertMessage({ type, message, onClose }) {
 function Modal({ children, onClose }) {
     useEffect(() => {
         const handleEsc = (event) => {
-            if (event.key === 'Escape') { // Modern way to check for Escape key
+            if (event.key === 'Escape') {
                 onClose();
             }
         };

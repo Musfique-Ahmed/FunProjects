@@ -1,7 +1,6 @@
 // src/components/SearchModule.jsx
 import React, { useState } from 'react';
-// Import db, appId, and Firebase query functions
-import { db, appId } from '../firebaseConfig'; // Assuming firebaseConfig.js is in src/
+import { db, appId } from '../firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 function SearchModule({
@@ -10,7 +9,8 @@ function SearchModule({
     setError,
     setLoading,
     setSearchCriteria,
-    bloodGroups // Prop received from App.jsx
+    bloodGroups,
+    setSuccessMessage // <-- ADDED PROP
 }) {
     const [bloodType, setBloodType] = useState(bloodGroups[0]);
     const [city, setCity] = useState('');
@@ -19,9 +19,10 @@ function SearchModule({
         e.preventDefault();
         setLoading(true);
         setError('');
-        setSearchResults([]); // Clear previous results
+        setSuccessMessage(''); // Clear previous success/info messages
+        setSearchResults([]);
 
-        if (!bloodType) { // City is also required by the form's `required` attribute
+        if (!bloodType) {
             setError("Please select a blood type.");
             setLoading(false);
             return;
@@ -36,14 +37,6 @@ function SearchModule({
         setSearchCriteria({ bloodType, city: trimmedCity });
 
         try {
-            // Firestore Security Rules Reminder:
-            // Ensure your rules for `/artifacts/{appId}/public/data/donors` allow read access for this query.
-            // e.g., `match /artifacts/{appId}/public/data/donors/{donorId} { allow read: if true; }`
-            // or `match /artifacts/{appId}/public/data/donors/{donorId} { allow list: if true; }` on the collection.
-            // For case-insensitive city search, you'd typically store a lowercase version of city in Firestore
-            // and query against that: `where("city_lowercase", "==", trimmedCity.toLowerCase())`.
-            // This example uses an exact match for simplicity.
-
             const donorsRef = collection(db, `/artifacts/${appId}/public/data/donors`);
             const q = query(donorsRef, where("bloodType", "==", bloodType), where("city", "==", trimmedCity));
             
@@ -54,9 +47,13 @@ function SearchModule({
             });
 
             if (results.length === 0) {
+                // Use setSuccessMessage for informational messages like "no results"
+                // Or setError if you want it styled as an error.
+                // For consistency with other error/success messages, let's use setSuccessMessage
+                // or you could introduce a new state for 'infoMessage'.
                 setSuccessMessage(`No donors found for ${bloodType} in ${trimmedCity}. Try a different search.`);
             } else {
-                 setSuccessMessage(''); // Clear any previous no results message
+                 setSuccessMessage(''); // Clear if results are found
             }
             setSearchResults(results);
             setCurrentPage('results');
@@ -77,9 +74,13 @@ function SearchModule({
                         id="bloodTypeSearch"
                         value={bloodType} 
                         onChange={(e) => setBloodType(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                        // Added text-gray-900 to ensure select text is dark
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 text-gray-900"
                     >
-                        {bloodGroups.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+                        {bloodGroups.map(bg => 
+                            // Added text-black to option tags for explicit dark text
+                            <option key={bg} value={bg} className="text-black">{bg}</option>
+                        )}
                     </select>
                 </div>
                 <div>

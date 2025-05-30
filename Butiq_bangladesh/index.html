@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutiqo Bangladesh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #F9F5F0; /* A soft cream background */ }
+        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; color: #4A3B31; /* Darker brown for headings */ }
+        .nav-link { color: #6D5F57; /* Muted brown for nav links */ transition: color 0.3s, font-weight 0.3s; }
+        .nav-link:hover { color: #D4A056; /* Gold accent for hover */ }
+        .nav-link.active { font-weight: 600; /* Tailwind's font-semibold */ color: #4A3B31; /* Darker color for active link */ }
+        .btn-primary { background-color: #A0522D; /* Sienna */ color: white; transition: background-color 0.3s; }
+        .btn-primary:hover { background-color: #8B4513; /* Darker Sienna */ }
+        .btn-secondary { border-color: #A0522D; color: #A0522D; transition: background-color 0.3s, color 0.3s; }
+        .btn-secondary:hover { background-color: #A0522D; color: white; }
+        .accent-gold { color: #D4A056; } /* Gold color for accents */
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu { display: none; position: absolute; background-color: white; z-index: 50; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 0.375rem; /* rounded-md */ }
+        .dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #6D5F57; }
+        .dropdown-menu a:hover { background-color: #F9F5F0; }
+        body { padding-top: 80px; }
+        header {
+            height: 80px; 
+        }
+        .logo-img {
+            max-height: 60px; 
+            width: auto;
+        }
+        .object-cover-top { object-position: top; }
+
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center h-full">
+            <a href="index.html">
+                <img src="images/logo.jpg" alt="Boutiqo Bangladesh Logo" class="logo-img" onerror="this.onerror=null;this.src='https://placehold.co/150x60/000000/FFFFFF?text=Logo+Not+Found';">
+            </a>
+            <nav class="space-x-3 md:space-x-6 text-xs sm:text-sm md:text-base">
+                <a href="index.html" class="nav-link">Home</a> 
+                <div class="relative inline-block dropdown">
+                    <a href="collections.html" class="nav-link">Collections</a> 
+                    <div class="dropdown-menu w-40 md:w-48 rounded-md">
+                        <a href="collections.html#sarees">Sarees</a>
+                        <a href="collections.html#kurtis">Kurtis</a>
+                        <a href="collections.html#dresses">Dresses</a>
+                        <a href="collections.html#new-arrivals">New Arrivals</a>
+                    </div>
+                </div>
+                <a href="lookbook.html" class="nav-link">Lookbook</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="how-to-order.html" class="nav-link">How to Order</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home-hero" class="h-[calc(70vh-80px)] bg-cover bg-center flex items-center justify-center text-white" style="background-image: url('images/cover.jpg');">
+        <div class="text-center bg-black bg-opacity-40 p-6 md:p-10 rounded-lg">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-playfair mb-4 text-white">Boutiqo Bangladesh</h1>
+            <p class="text-base sm:text-lg md:text-xl mb-6 md:mb-8 text-gray-200">The more you dress the more you happy.</p>
+            <a href="collections.html" class="btn-primary py-2 px-4 sm:py-3 sm:px-8 rounded-md text-sm sm:text-lg font-semibold">Explore Collections</a>
+        </div>
+    </section>
+
+    <section id="collections-preview" class="py-12 md:py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-playfair text-center mb-8 md:mb-12">Featured Collections</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                    <img src="images/10.jpg" alt="Elegant White Outfit from Boutiqo Bangladesh" class="w-full h-80 sm:h-96 object-cover object-cover-top" onerror="this.onerror=null;this.src='https://placehold.co/600x750/E1C16E/4A3B31?text=Saree+Image';">
+                    <div class="p-4 md:p-6 text-center">
+                        <h3 class="text-xl md:text-2xl font-playfair mb-2">Timeless Sarees</h3>
+                        <p class="text-stone-600 text-sm mb-4">Drape yourself in elegance with our exquisite saree collection from Boutiqo Bangladesh.</p>
+                        <a href="collections.html#sarees" class="btn-secondary border-2 py-2 px-4 md:px-6 rounded-md font-semibold text-sm">View Sarees</a>
+                    </div>
+                </div>
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                    <img src="images/kurti-1.jpg" alt="Stylish Printed Kurti from Boutiqo Bangladesh" class="w-full h-80 sm:h-96 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x750/D4A056/4A3B31?text=Kurti+Image';">
+                    <div class="p-4 md:p-6 text-center">
+                        <h3 class="text-xl md:text-2xl font-playfair mb-2">Chic Kurtis</h3>
+                        <p class="text-stone-600 text-sm mb-4">Perfect for every occasion, explore versatile kurtis by Boutiqo Bangladesh.</p>
+                        <a href="collections.html#kurtis" class="btn-secondary border-2 py-2 px-4 md:px-6 rounded-md font-semibold text-sm">View Kurtis</a>
+                    </div>
+                </div>
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                    <img src="images/9.jpg" alt="Floral Summer Dress from Boutiqo Bangladesh" class="w-full h-80 sm:h-96 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x750/A0522D/FFFFFF?text=Dress+Image';">
+                    <div class="p-4 md:p-6 text-center">
+                        <h3 class="text-xl md:text-2xl font-playfair mb-2">Modern Dresses</h3>
+                        <p class="text-stone-600 text-sm mb-4">Contemporary designs from Boutiqo Bangladesh that make a statement.</p>
+                        <a href="collections.html#dresses" class="btn-secondary border-2 py-2 px-4 md:px-6 rounded-md font-semibold text-sm">View Dresses</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="new-arrivals-teaser" class="py-12 md:py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-playfair text-center mb-8 md:mb-12">New Arrivals at Boutiqo Bangladesh</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <div class="border border-stone-200 rounded-lg p-4 text-center hover:shadow-xl transition-shadow">
+                    <img src="images/kurti-2.jpg" alt="Pink Floral Kurti - New Arrival at Boutiqo Bangladesh" class="w-full h-72 sm:h-80 object-cover mb-4 rounded" onerror="this.onerror=null;this.src='https://placehold.co/400x500/F0E68C/4A3B31?text=New+Arrival+1';">
+                    <h4 class="text-lg font-semibold text-stone-800">Pink Blossom Kurti</h4>
+                    <p class="text-stone-600 text-sm">Fresh and vibrant.</p>
+                    <a href="product-detail.html" class="text-amber-700 hover:text-amber-600 font-semibold mt-2 inline-block text-sm">View Details</a>
+                </div>
+                <div class="border border-stone-200 rounded-lg p-4 text-center hover:shadow-xl transition-shadow">
+                    <img src="images/12.jpg" alt="Puff Sleeve Floral Dress - New Arrival at Boutiqo Bangladesh" class="w-full h-72 sm:h-80 object-cover mb-4 rounded" onerror="this.onerror=null;this.src='https://placehold.co/400x500/FFEBCD/4A3B31?text=New+Arrival+2';">
+                    <h4 class="text-lg font-semibold text-stone-800">Dainty Floral Dress</h4>
+                    <p class="text-stone-600 text-sm">Charming and feminine.</p>
+                    <a href="product-detail.html" class="text-amber-700 hover:text-amber-600 font-semibold mt-2 inline-block text-sm">View Details</a>
+                </div>
+                <div class="border border-stone-200 rounded-lg p-4 text-center hover:shadow-xl transition-shadow">
+                    <img src="images/kurti-4.jpg" alt="Red Patterned Kurti - New Arrival at Boutiqo Bangladesh" class="w-full h-72 sm:h-80 object-cover mb-4 rounded" onerror="this.onerror=null;this.src='https://placehold.co/400x500/DEB887/4A3B31?text=New+Arrival+3';">
+                    <h4 class="text-lg font-semibold text-stone-800">Ruby Pattern Kurti</h4>
+                    <p class="text-stone-600 text-sm">Bold and beautiful.</p>
+                    <a href="product-detail.html" class="text-amber-700 hover:text-amber-600 font-semibold mt-2 inline-block text-sm">View Details</a>
+                </div>
+                <div class="border border-stone-200 rounded-lg p-4 text-center hover:shadow-xl transition-shadow">
+                    <img src="images/4.jpg" alt="Red and Black Top - New Arrival at Boutiqo Bangladesh" class="w-full h-72 sm:h-80 object-cover mb-4 rounded" onerror="this.onerror=null;this.src='https://placehold.co/400x500/CD853F/FFFFFF?text=New+Arrival+4';">
+                    <h4 class="text-lg font-semibold text-stone-800">Scarlet Trim Top</h4>
+                    <p class="text-stone-600 text-sm">Unique and stylish.</p>
+                    <a href="product-detail.html" class="text-amber-700 hover:text-amber-600 font-semibold mt-2 inline-block text-sm">View Details</a>
+                </div>
+            </div>
+             <div class="text-center mt-8 md:mt-12">
+                <a href="collections.html#new-arrivals" class="btn-primary py-2 px-4 sm:py-3 sm:px-8 rounded-md text-sm sm:text-lg font-semibold">Shop All New Arrivals</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about-snippet" class="py-12 md:py-16">
+        <div class="container mx-auto px-6 md:flex items-center">
+            <div class="md:w-1/2 md:pr-8 lg:pr-12 mb-8 md:mb-0">
+                <h2 class="text-3xl md:text-4xl font-playfair mb-4 md:mb-6">About Boutiqo Bangladesh</h2>
+                <p class="text-stone-700 leading-relaxed mb-4 text-sm md:text-base">
+                    Welcome to Boutiqo Bangladesh, your destination for exquisite fashion that blends traditional craftsmanship with contemporary style. We believe in clothing that empowers and tells a story. Each piece in our collection is curated with love and attention to detail.
+                </p>
+                <p class="text-stone-700 leading-relaxed mb-6 text-sm md:text-base">
+                    Discover designs that are unique, elegant, and timeless.
+                </p>
+                <a href="about.html" class="btn-secondary border-2 py-2 px-4 md:px-6 rounded-md font-semibold text-sm">Read Our Story</a>
+            </div>
+            <div class="md:w-1/2">
+                <img src="images/cover.jpg" alt="Boutiqo Bangladesh Brand Mood Collage" class="rounded-lg shadow-xl w-full h-auto object-cover max-h-80 md:max-h-96" onerror="this.onerror=null;this.src='https://placehold.co/1170x800/A0522D/FFFFFF?text=Brand+Image';">
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-cta" class="py-12 md:py-16 bg-amber-600 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-playfair mb-4 md:mb-6">See Something You Love?</h2>
+            <p class="text-lg md:text-xl mb-6 md:mb-8">We're here to help you find your perfect outfit from Boutiqo Bangladesh. Contact us to inquire about products or place an order.</p>
+            <div class="space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="https://www.facebook.com/Boutiqo.Bangladesh" target="_blank" class="bg-white text-amber-700 hover:bg-stone-100 py-2 px-4 sm:py-3 sm:px-8 rounded-md text-sm sm:text-lg font-semibold inline-block">Message on Facebook</a>
+                <a href="contact.html" class="border-2 border-white text-white hover:bg-white hover:text-amber-700 py-2 px-4 sm:py-3 sm:px-8 rounded-md text-sm sm:text-lg font-semibold inline-block">More Contact Options</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-stone-800 text-stone-300 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-4">
+                <a href="https://www.facebook.com/Boutiqo.Bangladesh" target="_blank" class="text-2xl mx-2 hover:text-amber-500 transition-colors">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 inline-block" viewBox="0 0 24 24">
+                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                    </svg>
+                </a>
+                 <a href="#" class="text-2xl mx-2 hover:text-amber-500 transition-colors">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 inline-block" viewBox="0 0 24 24">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                    </svg>
+                </a>
+            </div>
+            <p class="text-sm">© <span id="currentYearHome"></span> Boutiqo Bangladesh. All Rights Reserved.</p>
+            <p class="text-xs mt-1">Designed with care for Boutiqo Bangladesh</p>
+            <div class="mt-2 text-xs">
+                <a href="privacy.html" class="hover:text-amber-500 mx-1">Privacy Policy</a> | <a href="terms.html" class="hover:text-amber-500 mx-1">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('header nav a.nav-link');
+
+            navLinks.forEach(link => {
+                // Handle cases where href might be just "index.html" or "/index.html" or "page.html"
+                let linkPage = link.getAttribute('href').split('/').pop();
+                if (linkPage === "") linkPage = "index.html"; // For root path links like "/"
+
+                // Remove .html if currentPage doesn't have it (e.g. when served without extensions)
+                let normalizedCurrentPage = currentPage;
+                if (!currentPage.endsWith('.html') && linkPage.endsWith('.html')) {
+                     // No change needed, linkPage is already specific
+                } else if (currentPage.endsWith('.html') && !linkPage.endsWith('.html') && linkPage !== "") {
+                    // This case is less likely if all links are explicit .html
+                }
+
+
+                if (linkPage === normalizedCurrentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // Explicitly activate "Home" if on index.html, regardless of how normalizedCurrentPage ends up
+             if (currentPage === 'index.html' || currentPage === '') {
+                const homeLink = document.querySelector('header nav a.nav-link[href="index.html"]');
+                if (homeLink) homeLink.classList.add('active');
+            }
+
+
+            var yearSpan = document.getElementById('currentYearHome'); // Unique ID for this page
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+
+</body>
+</html>

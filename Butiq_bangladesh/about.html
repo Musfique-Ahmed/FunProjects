@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Boutiqo Bangladesh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #F9F5F0; }
+        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; color: #4A3B31; }
+        .nav-link { color: #6D5F57; transition: color 0.3s, font-weight 0.3s; }
+        .nav-link:hover { color: #D4A056; }
+        .nav-link.active { font-weight: 600; color: #4A3B31; }
+        .accent-gold { color: #D4A056; }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu { display: none; position: absolute; background-color: white; z-index: 50; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 0.375rem; }
+        .dropdown-menu a { display: block; padding: 0.75rem 1rem; color: #6D5F57; }
+        .dropdown-menu a:hover { background-color: #F9F5F0; }
+        body { padding-top: 80px; }
+        header { height: 80px; }
+        .logo-img { max-height: 60px; width: auto; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center h-full">
+            <a href="index.html">
+                <img src="images/logo.jpg" alt="Boutiqo Bangladesh Logo" class="logo-img" onerror="this.onerror=null;this.src='https://placehold.co/150x60/000000/FFFFFF?text=Logo+Not+Found';">
+            </a>
+            <nav class="space-x-3 md:space-x-6 text-xs sm:text-sm md:text-base">
+                <a href="index.html" class="nav-link">Home</a>
+                <div class="relative inline-block dropdown">
+                    <a href="collections.html" class="nav-link">Collections</a> 
+                    <div class="dropdown-menu w-40 md:w-48 rounded-md">
+                        <a href="collections.html#sarees">Sarees</a>
+                        <a href="collections.html#kurtis">Kurtis</a>
+                        <a href="collections.html#dresses">Dresses</a>
+                        <a href="collections.html#new-arrivals">New Arrivals</a>
+                    </div>
+                </div>
+                <a href="lookbook.html" class="nav-link">Lookbook</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="how-to-order.html" class="nav-link">How to Order</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-playfair text-center mb-8">Our Story at Boutiqo Bangladesh</h1>
+            
+            <div class="bg-white p-6 md:p-12 rounded-lg shadow-xl">
+                <div class="md:flex md:space-x-10 items-center">
+                    <div class="md:w-1/3 mb-6 md:mb-0">
+                        <img src="images/owner.jpg" alt="Boutiqo Bangladesh Style Inspiration" class="rounded-lg shadow-md w-full h-auto object-cover max-h-96" onerror="this.onerror=null;this.src='https://placehold.co/774x900/A0522D/FFFFFF?text=Brand+Image';">
+                    </div>
+                    <div class="md:w-2/3">
+                        <h2 class="text-2xl md:text-3xl font-playfair mb-4">Welcome to Boutiqo Bangladesh</h2>
+                        <p class="text-stone-700 leading-relaxed mb-4 text-sm md:text-base">
+                            At Boutiqo Bangladesh, we believe that clothing is more than just fabric; it's a form of expression, a celebration of heritage, and a reflection of personal style. Born from a passion for unique designs and quality craftsmanship, Boutiqo Bangladesh aims to bring you pieces that are crafted with care and designed to make you feel confident and beautiful.
+                        </p>
+                        <p class="text-stone-700 leading-relaxed mb-4 text-sm md:text-base">
+                            Our journey is inspired by the vibrant culture and timeless elegance of Bangladeshi fashion, fused with contemporary trends to create something truly special. We work diligently to source beautiful materials and create apparel that stands out.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-stone-200">
+                    <h2 class="text-2xl md:text-3xl font-playfair mb-6 text-center">Our Philosophy at Boutiqo Bangladesh</h2>
+                    <div class="grid md:grid-cols-3 gap-8 text-center">
+                        <div>
+                            <div class="text-3xl md:text-4xl accent-gold mb-3">❖</div>
+                            <h3 class="text-lg md:text-xl font-semibold text-stone-800 mb-2">Quality Craftsmanship</h3>
+                            <p class="text-stone-600 text-xs md:text-sm">We prioritize quality in every stitch, selecting fine fabrics and paying attention to detail.</p>
+                        </div>
+                        <div>
+                            <div class="text-3xl md:text-4xl accent-gold mb-3">⚜️</div>
+                            <h3 class="text-lg md:text-xl font-semibold text-stone-800 mb-2">Timeless Elegance</h3>
+                            <p class="text-stone-600 text-xs md:text-sm">Our designs blend traditional charm with modern sensibilities for a timeless appeal.</p>
+                        </div>
+                        <div>
+                            <div class="text-3xl md:text-4xl accent-gold mb-3">🌟</div>
+                            <h3 class="text-lg md:text-xl font-semibold text-stone-800 mb-2">Customer Delight</h3>
+                            <p class="text-stone-600 text-xs md:text-sm">Your satisfaction is our inspiration. We strive to provide a delightful shopping experience.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mt-10 pt-8 border-t border-stone-200 md:flex md:space-x-10 items-center">
+                     <div class="md:w-2/3 md:order-2">
+                        <h2 class="text-2xl md:text-3xl font-playfair mb-4">A Glimpse of Boutiqo Bangladesh</h2>
+                        <p class="text-stone-700 leading-relaxed mb-4 text-sm md:text-base">
+                           We are passionate about bringing you a diverse collection that caters to various tastes and occasions. From everyday chic to special event glamour, Boutiqo Bangladesh is your partner in style. Explore our world and find pieces that speak to you.
+                        </p>
+                    </div>
+                    <div class="md:w-1/3 mb-6 md:mb-0 md:order-1">
+                        <img src="images/cover.jpg" alt="Boutiqo Bangladesh Collection Glimpse" class="rounded-lg shadow-md w-full h-auto object-cover max-h-96" onerror="this.onerror=null;this.src='https://placehold.co/774x900/A0522D/FFFFFF?text=Brand+Image+Collage';">
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="contact.html" class="bg-amber-600 text-white hover:bg-amber-700 py-3 px-8 rounded-md text-lg font-semibold">Connect With Us</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-4">
+                <a href="https://www.facebook.com/Boutiqo.Bangladesh" target="_blank" class="text-2xl mx-2 hover:text-amber-500 transition-colors">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 inline-block" viewBox="0 0 24 24">
+                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                    </svg>
+                </a>
+                 <a href="#" class="text-2xl mx-2 hover:text-amber-500 transition-colors">
+                    <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6 inline-block" viewBox="0 0 24 24">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+                    </svg>
+                </a>
+            </div>
+            <p class="text-sm">© <span id="currentYearAbout"></span> Boutiqo Bangladesh. All Rights Reserved.</p>
+            <p class="text-xs mt-1">Designed with care for Boutiqo Bangladesh</p>
+             <div class="mt-2 text-xs">
+                <a href="privacy.html" class="hover:text-amber-500 mx-1">Privacy Policy</a> | <a href="terms.html" class="hover:text-amber-500 mx-1">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('header nav a.nav-link');
+
+            navLinks.forEach(link => {
+                let linkPage = link.getAttribute('href').split('/').pop();
+                if (linkPage === "") linkPage = "index.html"; 
+
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+             if (currentPage === 'about.html') { // Ensure "About Us" is active
+                const aboutLink = document.querySelector('header nav a.nav-link[href="about.html"]');
+                if (aboutLink) aboutLink.classList.add('active');
+            }
+
+
+            var yearSpan = document.getElementById('currentYearAbout'); // Unique ID
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+</body>
+</html>
