@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Resume Generator - Musfique Ahmed</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='60' font-family='Arial, sans-serif' font-weight='bold' fill='%239d4edd'%3EM%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF and html2pdf.js for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Marked.js for Markdown to HTML conversion -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap');
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #161625;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        nav .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #9d4edd;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .page-section {
+            padding: 40px 0;
+        }
+        .page-section h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #9d4edd;
+            margin-bottom: 10px;
+        }
+         .page-section h1::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 3px;
+            background-color: #9d4edd;
+            margin: 10px auto 30px; /* Increased bottom margin */
+            border-radius: 2px;
+        }
+        .page-section p.intro-text {
+            text-align: center;
+            font-size: 1.1em;
+            color: #c0c0c0;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #b39ddb;
+        }
+        .form-container input[type="text"],
+        .form-container textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #3c3c5a;
+            background-color: #2a2a3e;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        .form-container input[type="text"]:focus,
+        .form-container textarea:focus {
+            border-color: #9d4edd;
+            outline: none;
+        }
+        .form-container textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-container .cta-button { /* Copied from main page */
+            display: inline-block;
+            background-color: #9d4edd;
+            color: #ffffff;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        .form-container .cta-button:hover {
+            background-color: #8a3ab3;
+            transform: translateY(-2px);
+        }
+        .form-container .cta-button:disabled {
+            background-color: #5c5c7a;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+
+        #loading-indicator {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 20px;
+            color: #c58af9;
+            display: none; /* Hidden by default */
+        }
+        #loading-indicator .spinner {
+            border: 4px solid rgba(157, 78, 221, 0.3);
+            border-left-color: #9d4edd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #resume-preview-container {
+            margin-top: 30px;
+            background-color: #202035;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid #3c3c5a;
+            display: none; /* Hidden by default */
+        }
+        
+        /* --- Enhanced CSS for Resume Preview Content --- */
+        #resume-preview-content {
+            background-color: #ffffff; 
+            color: #222222; /* Darker text for better contrast on white */
+            padding: 30px 40px; /* Standard resume padding */
+            border-radius: 5px;
+            font-family: 'Roboto', 'Arial', sans-serif; /* Common resume font */
+            line-height: 1.4; /* Professional line spacing */
+            font-size: 11pt; /* Standard resume font size */
+        }
+        #resume-preview-content h1 { /* Name */
+            font-family: 'Lato', 'Arial Black', sans-serif;
+            font-size: 24pt; 
+            color: #333; 
+            margin-bottom: 5px; 
+            text-align: center;
+            font-weight: 700;
+            border-bottom: 2px solid #9d4edd; /* Accent line */
+            padding-bottom: 10px;
+        }
+        #resume-preview-content .contact-info { /* Container for contact details */
+            text-align: center;
+            font-size: 10pt;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        #resume-preview-content .contact-info p {
+            margin: 2px 0;
+            display: inline; /* Keep items on same line if possible */
+        }
+         #resume-preview-content .contact-info p:not(:last-child)::after {
+            content: "  •  "; /* Separator */
+            margin: 0 5px;
+        }
+        #resume-preview-content h2 { /* Section Titles: Summary, Experience, Education, Skills */
+            font-family: 'Lato', 'Arial', sans-serif;
+            font-size: 14pt; 
+            color: #9d4edd; /* Purple for section titles */
+            margin-top: 20px; 
+            margin-bottom: 8px; 
+            border-bottom: 1px solid #cccccc; 
+            padding-bottom: 3px;
+            font-weight: 700;
+            text-transform: uppercase; /* Professional look */
+        }
+        #resume-preview-content h3 { /* Job Titles, Degree Titles */
+            font-size: 12pt; 
+            color: #222; 
+            margin-top: 10px;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+        #resume-preview-content .sub-heading { /* For Organization/Institution & Dates */
+            font-size: 10pt;
+            color: #555;
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+        #resume-preview-content p { /* General paragraph text, summary, descriptions */
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+        #resume-preview-content ul { /* Bullet points for responsibilities, skills */
+            list-style: disc; 
+            padding-left: 20px; 
+            margin-bottom: 10px;
+        }
+        #resume-preview-content ul li {
+            margin-bottom: 4px;
+        }
+        #resume-preview-content strong { /* To emphasize text provided by Gemini */
+            font-weight: 500; 
+            color: #000;
+        }
+        #resume-preview-content a { /* For links if Gemini includes them */
+            color: #306998; /* Professional blue for links */
+            text-decoration: none;
+        }
+        #resume-preview-content a:hover {
+            text-decoration: underline;
+        }
+         /* Specific for Skills section if Gemini outputs categories */
+        #resume-preview-content .skills-category {
+            margin-bottom: 8px;
+        }
+        #resume-preview-content .skills-category strong { /* Category title */
+            font-size: 10.5pt;
+            color: #333;
+            display: block; /* Or inline-block with margin */
+            margin-bottom: 3px;
+        }
+        #resume-preview-content .skills-list { /* Text after category title */
+            font-size: 10pt;
+            color: #444;
+        }
+        /* --- End of Enhanced CSS --- */
+
+
+        #download-button-container {
+            text-align: center;
+            margin-top: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #161625;
+            border-top: 1px solid #2a2a3e;
+            margin-top: 60px;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">Musfique Ahmed - Portfolio</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-section">
+            <div class="container">
+                <h1>Dynamic Resume Generator</h1>
+                <p class="intro-text">
+                    Welcome! I'm excited to offer you a resume tailored to your specific needs.
+                    Please provide some details about the position you are hiring for, and I'll generate a personalized resume highlighting my most relevant skills and experiences.
+                </p>
+
+                <div class="form-container">
+                    <form id="resumeForm">
+                        <div>
+                            <label for="jobTitle">Job Title / Position:</label>
+                            <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g., Data Analyst, Python Developer Intern" required>
+                        </div>
+                        <div>
+                            <label for="keySkills">Top 3-5 Key Skills / Technologies:</label>
+                            <input type="text" id="keySkills" name="keySkills" placeholder="e.g., Python, SQL, Machine Learning, Data Visualization">
+                        </div>
+                        <div>
+                            <label for="industry">Industry / Domain (Optional):</label>
+                            <input type="text" id="industry" name="industry" placeholder="e.g., E-commerce, Healthcare, Finance">
+                        </div>
+                        <div>
+                            <label for="roleFocus">Primary Focus of the Role:</label>
+                            <input type="text" id="roleFocus" name="roleFocus" placeholder="e.g., Data analysis & reporting, Software development, Teaching">
+                        </div>
+                        <div>
+                            <label for="emphasizeExperience">Specific Experiences to Emphasize (Optional):</label>
+                            <input type="text" id="emphasizeExperience" name="emphasizeExperience" placeholder="e.g., Leadership, Technical Projects, Teaching">
+                        </div>
+                        <div>
+                            <label for="jobRequirements">Full Job Requirements / Description (Optional, but helpful!):</label>
+                            <textarea id="jobRequirements" name="jobRequirements" placeholder="Paste the full job description or key requirements here..."></textarea>
+                        </div>
+                        <button type="submit" id="generateButton" class="cta-button">Generate My Tailored Resume</button>
+                    </form>
+                </div>
+
+                <div id="loading-indicator">
+                    <div class="spinner"></div>
+                    Crafting your tailored resume, please wait... This might take a few moments.
+                </div>
+
+                <div id="resume-preview-container">
+                    <h2>Generated Resume Preview:</h2>
+                    <div id="resume-preview-content">
+                        <!-- Resume content will be injected here by JavaScript -->
+                    </div>
+                    <div id="download-button-container">
+                        <button id="downloadPdfButton" class="cta-button">Download as PDF</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear"></span> Musfique Ahmed. All Rights Reserved.</p>
+            <p><a href="index.html" style="color: #9d4edd; text-decoration:none;">Back to Main Portfolio</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // --- Base CV Data (to be populated from your CVs) ---
+        const baseCvData = {
+            name: "Musfique Ahmed",
+            contact: {
+                address: "Mirpur-12, Dhaka",
+                phone: "+880 1961-905838",
+                email: "anikmushfik@gmail.com",
+                github: "https://github.com/Musfique-Ahmed",
+                linkedin: "https://www.linkedin.com/in/musfique-ahmed-aa89a5293/"
+            },
+            summary: "A dedicated and detail-oriented Data Science student with a strong foundation in Python programming and hands-on experience in data analysis, visualization, problem-solving, teaching, and leadership. Eager to apply skills and continuously learn in a dynamic professional environment.",
+            education: [
+                {
+                    degree: "Bachelor of Data Science",
+                    institution: "United International University",
+                    details: "Completed credits: 45. (CGPA can be omitted as requested)",
+                    period: "Sep 2023 - Present"
+                },
+                {
+                    degree: "HSC (Science)",
+                    institution: "Dhaka Residential Model College",
+                    result: "GPA: 5.00",
+                    period: "Jan 2018 - Dec 2022 (Covers both HSC and SSC period based on CV)" // Adjusted to cover both based on CV
+                },
+                {
+                    degree: "SSC (Science)",
+                    institution: "Monipur High School & College",
+                    result: "GPA: 5.00",
+                    period: "Completed 2020"
+                }
+            ],
+            technicalSkills: {
+                programmingLanguages: ["Python", "HTML"],
+                librariesTools: ["Pandas", "NumPy", "Matplotlib", "Streamlit"],
+                dataAnalysis: ["Data manipulation", "Data wrangling", "Visualization", "Reporting"],
+                software: ["MS Excel", "Jupyter Notebooks", "VS Code"],
+                // From other CVs for specific roles:
+                webScraping: ["BeautifulSoup", "Scrapy", "Selenium", "XPath"],
+                databases: ["MySQL", "PostgreSQL"],
+                dataFormats: ["JSON", "CSV"],
+                contentDevelopment: ["Designing quizzes, assignments, and interactive lessons", "Presentation creation", "Public speaking"],
+                socialMediaManagement: ["Social media strategy & campaign execution", "Content creation, caption writing & visual design", "Meta Business Suite", "Canva", "Community engagement & growth strategy", "Performance tracking & post optimization"],
+                versionControl: ["Git", "Markdown"]
+            },
+            softSkills: ["Communication (Strong, English & Bangla)", "Teaching", "Mentoring", "Event coordination & management", "Leadership", "Problem-solving", "Team leadership", "Adaptability", "Punctuality", "Reliability", "Time management", "Multitasking", "Self-learning", "Customer service & conflict resolution"],
+            workExperience: [
+                {
+                    title: "Project Coordinator Intern",
+                    organization: "IRIIC, United International University",
+                    period: "September 2024 – Present",
+                    responsibilities: [
+                        "Helped to coordinate multiple projects and events, ensuring timely execution and quality outcomes.",
+                        "Prepared professional presentation slides for strategic meetings and project updates.",
+                        "Assisted in organizing events with external stakeholders, including government and international organizations.",
+                        "Developed content planning strategies for IRIIC's official social media pages, enhancing engagement and visibility."
+                    ]
+                },
+                {
+                    title: "Instructor - Programming with Python",
+                    organization: "Songjog Foundation & Internet Society Foundation",
+                    period: "Nov 2024 – Mar 2025",
+                    responsibilities: [
+                        "Conducted a 3-month Python programming course for junior students, covering fundamental and advanced concepts.",
+                        "Delivered free online training and provided career counselling for participants.",
+                        "Prepared course materials, designed quizzes and assignments to assess learning outcomes.",
+                        "Supported junior students in mastering programming concepts, including data types, loops, functions, and file handling.",
+                        "Provided one-on-one mentorship and career guidance."
+                    ]
+                },
+                {
+                    title: "Teaching Assistant",
+                    organization: "Department of Data Science, UIU",
+                    period: "Feb 2025 – Present",
+                    responsibilities: [
+                        "Assist faculty with Python and Data Science courses.",
+                        "Support students through academic advising and coursework assistance.",
+                        "Facilitate lab sessions and help students with practical implementations."
+                    ]
+                },
+                 {
+                    title: "Private Tutor - Academic Subjects",
+                    organization: "Self-Employed",
+                    period: "January 2021 - Present",
+                    responsibilities: [
+                        "Taught students from classes 5, 7, and 8, focusing on math and science subjects.",
+                        "Conducted one-on-one sessions to resolve doubts and improve performance.",
+                        "Interacted with parents to provide regular progress updates and feedback."
+                    ]
+                }
+            ],
+            leadershipAndVolunteering: [
+                 {
+                    title: "President",
+                    organization: "UIU Data Science Club",
+                    period: "February 2025 – Present",
+                    responsibilities: [
+                        "Established the UIU Data Science Club from the ground up, leading its kickstart and official formation.",
+                        "Designed and implemented the club’s full organizational structure, defining executive roles and responsibilities.",
+                        "Led the recruitment and onboarding of executive and core team members.",
+                        "Organized workshops, seminars, and hands-on events to engage students in data science, AI, and programming.",
+                        "Collaborated with faculty, external mentors, fellow students, other university clubs, and tech companies to build a dynamic and inclusive data science community.",
+                        "Developed long-term strategies to ensure the club’s growth, outreach, and sustainability.",
+                        "Mentored junior members and guided the executive team to maintain continuity and high-impact leadership."
+                    ]
+                },
+                {
+                    title: "Head of Data Science",
+                    organization: "UIU APP Forum",
+                    period: "Sep 2023 – Feb 2025",
+                    responsibilities: [
+                        "Led data-driven initiatives, provided mentorship to junior members.",
+                        "Organized workshops on Python for data science applications.",
+                        "Conducted Python-focused workshops for junior learners.",
+                        "Mentored new members and coordinated training sessions."
+                    ]
+                },
+                {
+                    title: "Senior Executive (R&D)",
+                    organization: "UIU EDF (Entrepreneurship Development Forum)",
+                    period: "Sep 2023 – Feb 2025",
+                    responsibilities: [
+                        "Coordinated R&D activities and collaborated with teams to develop projects.",
+                        "Organized innovation-based sessions and contributed to R&D events."
+                    ]
+                },
+                {
+                    title: "Event Coordinator",
+                    organization: "Data Science Dept., UIU",
+                    period: "Sep 2023 – Present",
+                    responsibilities: [
+                        "Organized BSDS events (Football Tournament 2023, BSDS Picnic 2024, BSDS Iftar Mahfil 2024, and BSDS 1 Year Anniversary)."
+                    ]
+                },
+                {
+                    title: "Mentor",
+                    organization: "UIU CSE & Data Science Dept.",
+                    period: "Sep 2023 – Present",
+                    responsibilities: [
+                        "Guided students on project displays and presentations during UIU CSE Project Show Fall 2024."
+                    ]
+                }
+            ],
+            projects: [ // Can be a separate section or integrated into experience
+                {
+                    title: "Data Analysis Dashboards & Visualizations",
+                    description: "Built data analysis dashboards and visualizations using Pandas and Matplotlib as part of academic work, applying Python for problem-solving and data-driven storytelling.",
+                    technologies: ["Python", "Pandas", "Matplotlib"]
+                },
+                {
+                    title: "Web Scraping Tools (Independent Projects)",
+                    description: "Built scraping tools using BeautifulSoup, Selenium, and Pandas to collect structured data from e-commerce, news, and job sites. Developed scripts to export data in CSV, JSON, and integrated with MySQL. Handled login sessions, pagination, and dynamic content using Selenium with XPath. Used exception handling and logging.",
+                    technologies: ["Python", "BeautifulSoup", "Selenium", "Pandas", "MySQL", "JSON", "CSV", "XPath", "Git"]
+                }
+            ],
+            entrepreneurship: [
+                {
+                    title: "Co-founder/Owner",
+                    ventures: "Campus Desserts & Nikah Nama",
+                    responsibilities: [
+                        "Developed and managed two successful entrepreneurial ventures.",
+                        "Led content creation, branding, and customer engagement.",
+                        "Managed operations, team coordination, and business promotion.",
+                        "Created and managed social media content for Facebook and Instagram, including posts, stories, and promotional campaigns, increasing audience engagement and brand visibility.",
+                        "Designed marketing strategies and collaborated with team members to ensure seamless execution of campaigns."
+                    ]
+                }
+            ],
+            awards: [
+                { name: "Champion – Senior Project Display", body: "DRMC Intra Science Festival" },
+                { name: "Champion – Senior Project Display", body: "DRMC National Nature Festival" },
+                { name: "University Scholarship Awards", body: "United International University", details: "25% (twice), 50% (once), and 100% (twice) for academic excellence." }
+            ],
+            languages: [
+                { name: "Bangla", proficiency: "Fluent (Native)" },
+                { name: "English", proficiency: "Fluent" },
+                { name: "German", proficiency: "Basic/Learning" }, // Assuming proficiency levels
+                { name: "Japanese", proficiency: "Basic/Learning" },
+                { name: "Korean", proficiency: "Basic/Learning" },
+                { name: "Arabic", proficiency: "Basic/Learning" },
+                { name: "Hindi", proficiency: "Conversational/Intermediate" }
+            ],
+            references: [ // Optional, can be "Available upon request"
+                { name: "Prof. Swakkhar Shatabda", title: "Former Director, Data Science, UIU", email: "swakkhar@cse.uiu.ac.bd", phone: "+880 1776-195310" },
+                { name: "Dr. Jannatun Noor Mukta", title: "Director, Data Science, UIU", email: "jannatun@cse.uiu.ac.bd", phone: "+8801911-058877"},
+                { name: "Mr. Md. Ashiqur Rahman", title: "Lecturer, Dept. of CSE, UIU", email: "ashiqurrahman@cse.uiu.ac.bd", phone: "+880 1872-786979"}
+            ]
+        };
+
+        // --- Form and UI Elements ---
+        const resumeForm = document.getElementById('resumeForm');
+        const generateButton = document.getElementById('generateButton');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const resumePreviewContainer = document.getElementById('resume-preview-container');
+        const resumePreviewContent = document.getElementById('resume-preview-content');
+        const downloadButtonContainer = document.getElementById('download-button-container');
+        const downloadPdfButton = document.getElementById('downloadPdfButton');
+
+        resumeForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            generateButton.disabled = true;
+            loadingIndicator.style.display = 'block';
+            resumePreviewContainer.style.display = 'none';
+            downloadButtonContainer.style.display = 'none';
+            resumePreviewContent.innerHTML = ''; // Clear previous preview
+
+            const formData = new FormData(resumeForm);
+            const recruiterInput = {
+                jobTitle: formData.get('jobTitle'),
+                keySkills: formData.get('keySkills'),
+                industry: formData.get('industry'),
+                roleFocus: formData.get('roleFocus'),
+                emphasizeExperience: formData.get('emphasizeExperience'),
+                jobRequirements: formData.get('jobRequirements')
+            };
+
+            // --- Construct the Prompt for Gemini ---
+            let prompt = `Act as an expert resume writer. Generate a professional, tailored, single-column resume for Musfique Ahmed based on the following information.
+            The resume should be optimized for the position described by the recruiter.
+            Prioritize and highlight skills and experiences most relevant to the recruiter's needs.
+            The output MUST be in clean Markdown format.
+            Ensure the following sections are always included and clearly formatted: Contact Information (Email, Phone, LinkedIn, GitHub), Education, and References (can state "Available upon request" if preferred by the model).
+            Generate a concise, impactful Summary tailored to the recruiter's input.
+            Select and order Work Experience, Projects, and Skills to best match the job requirements.
+            Include optional sections like Awards, Entrepreneurship, or Languages ONLY if they add significant and direct value for the specified role and there is space; otherwise, omit them to keep the resume focused.
+            Format the resume professionally. Use Markdown headings for sections (e.g., ## Summary, ## Experience).
+            For each experience entry, include Title, Organization, Dates, and bullet points for responsibilities/achievements.
+            For education, include Degree, Institution, and relevant details.
+            For skills, categorize them if possible (e.g., Technical Skills: Programming Languages, Libraries/Tools; Soft Skills).
+
+            Musfique Ahmed's Base CV Information:
+            ${JSON.stringify(baseCvData, null, 2)}
+
+            Recruiter's Input for Tailoring:
+            Job Title: ${recruiterInput.jobTitle}
+            Key Skills/Technologies Looking For: ${recruiterInput.keySkills}
+            Industry/Domain: ${recruiterInput.industry || 'Not specified'}
+            Primary Focus of the Role: ${recruiterInput.roleFocus}
+            Specific Experiences to Emphasize: ${recruiterInput.emphasizeExperience || 'Not specified'}
+            Full Job Requirements/Description:
+            ${recruiterInput.jobRequirements || 'Not specified'}
+
+            Generate the resume in Markdown format. Start with Musfique Ahmed's name as a top-level heading (# Name).
+            Follow with contact information.
+            Then proceed with standard resume sections (Summary, Skills, Experience, Education, etc.) as appropriate and tailored.
+            `;
+            
+            // --- Call Gemini API ---
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Left empty as per instructions for Canvas environment
+            // Corrected apiUrl line
+            const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + apiKey;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                
+                console.log("Gemini API Response:", result); // For debugging
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    
+                    const markdownText = result.candidates[0].content.parts[0].text;
+                    console.log("Markdown Text from Gemini:", markdownText); // For debugging
+                    
+                    // Convert Markdown to HTML using Marked.js
+                    // Ensure Marked.js is loaded before this script runs
+                    if (typeof marked !== 'undefined') {
+                        resumePreviewContent.innerHTML = marked.parse(markdownText);
+                    } else {
+                        console.error("Marked.js library is not loaded.");
+                        resumePreviewContent.innerHTML = "<p>Error: Markdown library not loaded. Cannot display resume.</p>";
+                    }
+                    resumePreviewContainer.style.display = 'block';
+                    downloadButtonContainer.style.display = 'block';
+
+                } else {
+                    console.error("Error from Gemini API or unexpected response structure:", result);
+                    let errorMsg = "<p>Sorry, there was an error generating the resume. The AI model's response was not as expected. Please try again.</p>";
+                    if (result.promptFeedback && result.promptFeedback.blockReason) {
+                         errorMsg += "<p>Reason: " + (result.promptFeedback.blockReasonMessage || result.promptFeedback.blockReason) + "</p>";
+                    }
+                     if (result.error) {
+                        errorMsg += "<p>API Error: " + result.error.message + "</p>";
+                    }
+                    resumePreviewContent.innerHTML = errorMsg;
+                    resumePreviewContainer.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                resumePreviewContent.innerHTML = "<p>Sorry, there was an error connecting to the resume generation service. Please check your internet connection and try again.</p>";
+                resumePreviewContainer.style.display = 'block';
+            } finally {
+                loadingIndicator.style.display = 'none';
+                generateButton.disabled = false;
+            }
+        });
+
+        // --- PDF Download Functionality ---
+        downloadPdfButton.addEventListener('click', function() {
+            const element = document.getElementById('resume-preview-content');
+            
+            // Ensure content is not empty before attempting PDF generation
+            if (!element.innerHTML.trim()) {
+                alert("Resume preview is empty. Cannot generate PDF.");
+                return;
+            }
+            console.log("HTML content for PDF:", element.innerHTML); // For debugging
+
+            // Ensure the element is visible and has dimensions before capturing
+            // This is a bit of a hacky way to force repaint/reflow
+            element.style.display = 'block'; // Ensure it's block
+            const currentWidth = element.offsetWidth; // Force reflow
+
+            setTimeout(() => { // Add a small delay
+                const opt = {
+                    margin:       [0.5, 0.75, 0.5, 0.75], // top, left, bottom, right in inches
+                    filename:     'Musfique_Ahmed_Resume_Tailored_for_' + (document.getElementById('jobTitle').value.replace(/[^a-zA-Z0-9]/g, '_') || 'Role') + '.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { 
+                        scale: 2, 
+                        logging: true, 
+                        useCORS: true,
+                        // Removed problematic scroll/window options
+                        // Ensure that web fonts are loaded and applied, or consider simpler fonts if issues persist
+                        // allowTaint: true, // Use with caution if you have external images from different origins
+                    },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                
+                html2pdf().from(element).set(opt).save()
+                    .catch(err => {
+                        console.error("Error generating PDF with html2pdf:", err);
+                        alert("An error occurred while generating the PDF. Please check the console for details.");
+                    });
+            }, 200); // 200ms delay
+
+        });
+
+    </script>
+</body>
+</html>
