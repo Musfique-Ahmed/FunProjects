@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BongoLingo - Certified Translation & Trusted Guides</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#003B73', // Deep Navy Blue
+                        'accent': '#00ADEF',  // Sky Blue
+                        'secondary': '#FFD700',// Gold / Trust
+                        'light-bg': '#F9F9F9',
+                    },
+                    fontFamily: {
+                        'sans': ['Open Sans', 'sans-serif'],
+                        'heading': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Poppins & Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+
+    <!-- Simple Icons for demonstration -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Enable smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-white font-sans">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="index.html" class="font-heading text-2xl font-bold text-primary">BongoLingo</a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-accent transition-colors duration-300">Home</a>
+                    <a href="find-guides.html" class="text-gray-700 hover:text-accent transition-colors duration-300">Find a Guide</a>
+                    <a href="for-translators.html" class="text-gray-700 hover:text-accent transition-colors duration-300">For Translators</a>
+                    <a href="pricing.html" class="text-gray-700 hover:text-accent transition-colors duration-300">Pricing</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-accent transition-colors duration-300">Blog</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-accent transition-colors duration-300">Contact</a>
+                </nav>
+                
+                <!-- CTA Buttons -->
+                <div class="flex items-center space-x-2">
+                    <a href="login.html" class="hidden sm:block text-primary hover:text-accent font-semibold py-2 px-4 transition-colors">Login</a>
+                    <a href="signup.html" class="bg-accent hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">Sign Up</a>
+                    <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
+                        <i data-lucide="menu"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="index.html" class="block py-2 text-gray-700 hover:text-accent">Home</a>
+            <a href="find-guides.html" class="block py-2 text-gray-700 hover:text-accent">Find a Guide</a>
+            <a href="for-translators.html" class="block py-2 text-gray-700 hover:text-accent">For Translators</a>
+            <a href="for-guides.html" class="block py-2 text-gray-700 hover:text-accent">For Guides</a>
+            <a href="pricing.html" class="block py-2 text-gray-700 hover:text-accent">Pricing</a>
+            <a href="blog.html" class="block py-2 text-gray-700 hover:text-accent">Blog</a>
+            <a href="contact.html" class="block py-2 text-gray-700 hover:text-accent">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-20 md:py-32 bg-light-bg">
+            <div class="container mx-auto px-6 text-center">
+                <div class="max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-6xl font-heading font-bold text-primary leading-tight">Certified Translation. Trusted Guides.</h1>
+                    <h2 class="text-4xl md:text-5xl font-heading font-bold text-accent leading-tight mb-6">For Bangladesh & Beyond.</h2>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10">Legal, Visa, Academic, Corporate & Tourism Solutions — 100% Human Verified.</p>
+                    <a href="signup.html" class="bg-primary hover:bg-blue-900 text-white font-bold text-lg py-4 px-10 rounded-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it Works Section -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">How It Works</h2>
+                    <p class="text-gray-500 mt-2">A simple, transparent, and secure process.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <!-- Step 1 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                        <div class="bg-accent/10 text-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-2">1. Upload Documents</h3>
+                        <p class="text-gray-600">Securely upload your files for translation, or browse our guides.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                        <div class="bg-accent/10 text-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="user-check" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-2">2. Get Verified Professionals</h3>
+                        <p class="text-gray-600">Our certified translators and guides are vetted for quality and trust.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                        <div class="bg-accent/10 text-accent rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                           <i data-lucide="file-check-2" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-2">3. Receive Your Service</h3>
+                        <p class="text-gray-600">Download certified documents or embark on your guided tour.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 bg-light-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">Translation Services</h2>
+                    <p class="text-gray-500 mt-2">Comprehensive solutions tailored to your needs.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="group bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"><div class="flex items-center space-x-4"><div class="bg-primary/10 text-primary p-3 rounded-lg"><i data-lucide="file-badge-2" class="w-6 h-6"></i></div><h3 class="text-lg font-heading font-semibold text-primary">Certified Visa Translation</h3></div></div>
+                    <div class="group bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"><div class="flex items-center space-x-4"><div class="bg-primary/10 text-primary p-3 rounded-lg"><i data-lucide="scale" class="w-6 h-6"></i></div><h3 class="text-lg font-heading font-semibold text-primary">Legal & Court Translation</h3></div></div>
+                    <div class="group bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"><div class="flex items-center space-x-4"><div class="bg-primary/10 text-primary p-3 rounded-lg"><i data-lucide="graduation-cap" class="w-6 h-6"></i></div><h3 class="text-lg font-heading font-semibold text-primary">Academic Certificate Translation</h3></div></div>
+                    <div class="group bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"><div class="flex items-center space-x-4"><div class="bg-primary/10 text-primary p-3 rounded-lg"><i data-lucide="heart-pulse" class="w-6 h-6"></i></div><h3 class="text-lg font-heading font-semibold text-primary">Medical Translation</h3></div></div>
+                    <div class="group bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"><div class="flex items-center space-x-4"><div class="bg-primary/10 text-primary p-3 rounded-lg"><i data-lucide="briefcase" class="w-6 h-6"></i></div><h3 class="text-lg font-heading font-semibold text-primary">Corporate & Business</h3></div></div>
+                    <div class="group bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"><div class="flex items-center space-x-4"><div class="bg-primary/10 text-primary p-3 rounded-lg"><i data-lucide="store" class="w-6 h-6"></i></div><h3 class="text-lg font-heading font-semibold text-primary">Business & E-commerce</h3></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">Trusted by Hundreds</h2>
+                    <p class="text-gray-500 mt-2">See what our clients have to say about us.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100"><div class="flex items-center mb-4"><img src="https://placehold.co/48x48/003B73/FFFFFF?text=A.K." alt="Client" class="w-12 h-12 rounded-full mr-4"><div><h4 class="font-bold text-primary">A. Khan</h4><p class="text-sm text-gray-500">Visa Applicant</p></div></div><p class="text-gray-600">"The translation was fast, accurate, and accepted by the embassy without any issues. Highly recommended!"</p></div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100"><div class="flex items-center mb-4"><img src="https://placehold.co/48x48/00ADEF/FFFFFF?text=S.A." alt="Client" class="w-12 h-12 rounded-full mr-4"><div><h4 class="font-bold text-primary">S. Ahmed</h4><p class="text-sm text-gray-500">Law Firm</p></div></div><p class="text-gray-600">"BongoLingo is our go-to for all legal document translations. Professional, confidential, and always on time."</p></div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100"><div class="flex items-center mb-4"><img src="https://placehold.co/48x48/FFD700/000000?text=M.C." alt="Client" class="w-12 h-12 rounded-full mr-4"><div><h4 class="font-bold text-primary">M. Chowdhury</h4><p class="text-sm text-gray-500">Tourist</p></div></div><p class="text-gray-600">"Our guide Fatima was amazing! She showed us the best spots in Old Dhaka. It was an unforgettable experience."</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Find a Guide CTA Section -->
+        <section class="bg-primary">
+            <div class="container mx-auto px-6 py-20 text-center text-white">
+                 <h2 class="text-3xl md:text-4xl font-heading font-bold">Explore Bangladesh with a Local Expert</h2>
+                 <p class="text-lg md:text-xl text-gray-300 mt-4 mb-8 max-w-2xl mx-auto">Discover hidden gems, cultural sites, and culinary delights with our trusted, friendly guides.</p>
+                 <a href="find-guides.html" class="bg-accent hover:bg-sky-500 text-white font-bold text-lg py-4 px-10 rounded-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                    Find Your Guide Now
+                </a>
+            </div>
+        </section>
+
+        <!-- Partner Logos Section -->
+        <section class="py-16 bg-light-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center">
+                     <h3 class="text-xl font-heading font-semibold text-gray-500 mb-8">Recognized and Accepted By Major Institutions</h3>
+                </div>
+                <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-6">
+                    <img src="https://placehold.co/120x60/CCCCCC/FFFFFF?text=Embassy" alt="Partner Logo" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+                    <img src="https://placehold.co/120x60/CCCCCC/FFFFFF?text=University" alt="Partner Logo" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+                    <img src="https://placehold.co/120x60/CCCCCC/FFFFFF?text=Law+Firm" alt="Partner Logo" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+                    <img src="https://placehold.co/120x60/CCCCCC/FFFFFF?text=Corporate" alt="Partner Logo" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+                     <img src="https://placehold.co/120x60/CCCCCC/FFFFFF?text=NGO" alt="Partner Logo" class="h-10 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+                </div>
+            </div>
+        </section>
+        
+        <!-- Blog Teaser Section -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-primary">Helpful Articles & Guides</h2>
+                    <p class="text-gray-500 mt-2">Tips and insights from our experts.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group"><img src="https://placehold.co/600x400/00ADEF/FFFFFF?text=Visa+Tips" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" alt="Blog Post Image"><div class="p-6"><p class="text-sm text-gray-500 mb-2">Visa Application</p><h3 class="text-xl font-heading font-semibold text-primary mb-4">5 Common Mistakes to Avoid in Your Visa Application Documents</h3><a href="blog.html" class="text-accent font-semibold hover:underline">Read More &rarr;</a></div></div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group"><img src="https://placehold.co/600x400/003B73/FFFFFF?text=Travel+Guide" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" alt="Blog Post Image"><div class="p-6"><p class="text-sm text-gray-500 mb-2">Travel in Bangladesh</p><h3 class="text-xl font-heading font-semibold text-primary mb-4">Top 5 Must-See Places for First-Time Visitors to Dhaka</h3><a href="blog.html" class="text-accent font-semibold hover:underline">Read More &rarr;</a></div></div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden group"><img src="https://placehold.co/600x400/FFD700/000000?text=Student+Help" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" alt="Blog Post Image"><div class="p-6"><p class="text-sm text-gray-500 mb-2">Study Abroad</p><h3 class="text-xl font-heading font-semibold text-primary mb-4">A Student's Guide to Translating Academic Records</h3><a href="blog.html" class="text-accent font-semibold hover:underline">Read More &rarr;</a></div></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- About -->
+                <div class="col-span-1 md:col-span-1"><h3 class="font-heading text-xl font-bold mb-4">BongoLingo</h3><p class="text-gray-300">Certified Translation. Trusted Guides.</p></div>
+                <!-- Links -->
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="find-guides.html" class="text-gray-300 hover:text-white">Find a Guide</a></li>
+                        <li><a href="pricing.html" class="text-gray-300 hover:text-white">Pricing</a></li>
+                        <li><a href="blog.html" class="text-gray-300 hover:text-white">Blog</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Refund Policy</a></li>
+                    </ul>
+                </div>
+                <!-- Socials -->
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="facebook"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-700 pt-6 text-center text-gray-400 text-sm">
+                &copy; <span id="current-year"></span> BongoLingo. All Rights Reserved. Dhaka, Bangladesh.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Lucide Icons activation
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>

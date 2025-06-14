@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - BongoLingo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#003B73',
+                        'accent': '#00ADEF',
+                        'secondary': '#FFD700',
+                        'light-bg': '#F9F9F9',
+                    },
+                    fontFamily: {
+                        'sans': ['Open Sans', 'sans-serif'],
+                        'heading': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-light-bg font-sans">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="font-heading text-2xl font-bold text-primary">BongoLingo</a>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-accent">Home</a>
+                    <a href="index.html#services" class="text-gray-700 hover:text-accent">Services</a>
+                    <a href="for-translators.html" class="text-gray-700 hover:text-accent">For Translators</a>
+                    <a href="for-guides.html" class="text-gray-700 hover:text-accent">For Guides</a>
+                    <a href="pricing.html" class="text-gray-700 hover:text-accent">Pricing</a>
+                    <a href="blog.html" class="text-accent font-semibold">Blog</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-accent">Contact</a>
+                </nav>
+                <div class="flex items-center space-x-2">
+                    <a href="login.html" class="hidden sm:block text-primary hover:text-accent font-semibold py-2 px-4">Login</a>
+                    <a href="signup.html" class="bg-accent hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-lg">Sign Up</a>
+                    <button id="mobile-menu-button" class="md:hidden p-2"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="index.html" class="block py-2">Home</a>
+            <a href="for-translators.html" class="block py-2">For Translators</a>
+            <a href="for-guides.html" class="block py-2">For Guides</a>
+            <a href="pricing.html" class="block py-2">Pricing</a>
+            <a href="blog.html" class="block py-2 text-accent font-semibold">Blog</a>
+            <a href="contact.html" class="block py-2">Contact</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-16">
+        <h1 class="text-4xl font-heading font-bold text-primary text-center">BongoLingo Blog</h1>
+        <p class="text-xl text-gray-600 text-center mt-4 max-w-3xl mx-auto">Your source for visa tips, embassy guides, translation insights, and travel stories.</p>
+        
+        <!-- Blog posts will be listed here -->
+         <div class="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Blog Card from Homepage (Example) -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                <img src="https://placehold.co/600x400/00ADEF/FFFFFF?text=Visa+Tips" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" alt="Blog Post Image">
+                <div class="p-6">
+                    <p class="text-sm text-gray-500 mb-2">Visa Application</p>
+                    <h3 class="text-xl font-heading font-semibold text-primary mb-4">5 Common Mistakes to Avoid in Your Visa Application Documents</h3>
+                    <a href="#" class="text-accent font-semibold hover:underline">Read More &rarr;</a>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                <img src="https://placehold.co/600x400/003B73/FFFFFF?text=Legal+Guide" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" alt="Blog Post Image">
+                <div class="p-6">
+                    <p class="text-sm text-gray-500 mb-2">Legal Help</p>
+                    <h3 class="text-xl font-heading font-semibold text-primary mb-4">Why Certified Translation is Crucial for Legal Proceedings</h3>
+                     <a href="#" class="text-accent font-semibold hover:underline">Read More &rarr;</a>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                 <img src="https://placehold.co/600x400/FFD700/000000?text=Student+Help" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" alt="Blog Post Image">
+                <div class="p-6">
+                     <p class="text-sm text-gray-500 mb-2">Study Abroad</p>
+                    <h3 class="text-xl font-heading font-semibold text-primary mb-4">A Student's Guide to Translating Academic Records</h3>
+                    <a href="#" class="text-accent font-semibold hover:underline">Read More &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white">
+        <div class="container mx-auto px-6 py-12">
+             <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-heading text-xl font-bold mb-4">BongoLingo</h3>
+                    <p class="text-gray-300">Certified Translation. Trusted Guides.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html#services" class="text-gray-300 hover:text-white">Services</a></li>
+                        <li><a href="pricing.html" class="text-gray-300 hover:text-white">Pricing</a></li>
+                        <li><a href="blog.html" class="text-gray-300 hover:text-white">Blog</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                     <h4 class="font-semibold text-lg mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Refund Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="facebook"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-700 pt-6 text-center text-gray-400 text-sm">
+                &copy; <span id="current-year"></span> BongoLingo. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

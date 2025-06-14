@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - BongoLingo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins & Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#003B73', // Deep Navy Blue
+                        'accent': '#00ADEF',  // Sky Blue
+                        'light-bg': '#F9F9F9',
+                    },
+                    fontFamily: {
+                        'sans': ['Open Sans', 'sans-serif'],
+                        'heading': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-light-bg font-sans">
+
+    <div class="flex flex-col items-center justify-center min-h-screen py-12 px-4">
+        <!-- Logo -->
+        <a href="index.html" class="font-heading text-3xl font-bold text-primary mb-8">BongoLingo</a>
+
+        <!-- Sign Up Card -->
+        <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+            <h1 class="text-2xl font-bold font-heading text-primary text-center mb-2">Create Your Account</h1>
+            <p class="text-gray-500 text-center mb-6">Join our platform to get started.</p>
+            
+            <form id="signup-form">
+                <div class="space-y-4">
+                    <!-- Full Name -->
+                    <div>
+                        <label for="fullname" class="block font-semibold text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="fullname" name="fullname" placeholder="e.g., Anis Khan" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:outline-none transition-shadow">
+                    </div>
+
+                    <!-- Email Input -->
+                    <div>
+                        <label for="email" class="block font-semibold text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:outline-none transition-shadow">
+                    </div>
+                    
+                    <!-- Password Input -->
+                    <div>
+                        <label for="password" class="block font-semibold text-gray-700 mb-1">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Minimum 8 characters" required minlength="8"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:outline-none transition-shadow">
+                    </div>
+
+                    <!-- User Role Selection -->
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">I am a...</label>
+                        <div class="grid grid-cols-2 gap-2">
+                             <label class="flex items-center justify-center p-3 border border-gray-300 rounded-lg cursor-pointer has-[:checked]:bg-accent/10 has-[:checked]:border-accent has-[:checked]:font-semibold">
+                                <input type="radio" name="role" value="client" class="sr-only" checked>
+                                <span>Client</span>
+                            </label>
+                            <label class="flex items-center justify-center p-3 border border-gray-300 rounded-lg cursor-pointer has-[:checked]:bg-accent/10 has-[:checked]:border-accent has-[:checked]:font-semibold">
+                                <input type="radio" name="role" value="provider" class="sr-only">
+                                <span>Translator / Guide</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms Agreement -->
+                <div class="mt-6">
+                    <label class="flex items-start text-sm text-gray-600">
+                        <input type="checkbox" required class="form-checkbox h-5 w-5 text-accent rounded focus:ring-accent mt-0.5 mr-3">
+                        <span>I agree to the BongoLingo <a href="#" class="font-semibold text-accent hover:underline">Terms of Service</a> and <a href="#" class="font-semibold text-accent hover:underline">Privacy Policy</a>.</span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full mt-6 bg-accent hover:bg-sky-500 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                    Create Account
+                </button>
+            </form>
+
+            <!-- Link to Login -->
+            <p class="text-center text-gray-600 mt-8">
+                Already have an account? <a href="login.html" class="font-semibold text-accent hover:underline">Login</a>
+            </p>
+        </div>
+        <p class="text-center text-gray-400 text-sm mt-6">&copy; 2025 BongoLingo. All Rights Reserved.</p>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            // Prevent the default form submission which would reload the page
+            event.preventDefault();
+
+            // Get the selected user role
+            const selectedRole = document.querySelector('input[name="role"]:checked').value;
+
+            // Redirect based on the role
+            if (selectedRole === 'client') {
+                // For a real app, you would handle registration here
+                // before redirecting.
+                window.location.href = 'client-dashboard.html';
+            } else if (selectedRole === 'provider') {
+                // Redirect to the translator/guide dashboard
+                window.location.href = 'translator-dashboard.html';
+            } else {
+                // Fallback, though it shouldn't be needed
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+
+</body>
+</html>
