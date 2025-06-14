@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator Dashboard - BongoLingo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins & Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#003B73', // Deep Navy Blue
+                        'accent': '#00ADEF',  // Sky Blue
+                        'secondary': '#FFD700',// Gold / Trust
+                        'light-bg': '#F9F9F9',
+                        'success': '#10B981', // Green
+                        'danger': '#EF4444', // Red
+                    },
+                    fontFamily: {
+                        'sans': ['Open Sans', 'sans-serif'],
+                        'heading': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #003B73; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #005eb8; }
+    </style>
+</head>
+<body class="bg-light-bg font-sans">
+
+    <div id="app" class="flex h-screen bg-light-bg">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-primary text-white flex flex-col transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0">
+            <div class="p-6 text-center border-b border-blue-800">
+                <a href="index.html" class="font-heading text-2xl font-bold">BongoLingo</a>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="flex items-center px-4 py-2.5 bg-accent/20 rounded-lg text-white font-semibold">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="package-search" class="w-5 h-5 mr-3"></i> My Orders
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="award" class="w-5 h-5 mr-3"></i> Certification Upload
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="user-check" class="w-5 h-5 mr-3"></i> KYC Verification
+                </a>
+                 <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="dollar-sign" class="w-5 h-5 mr-3"></i> Earnings Summary
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="landmark" class="w-5 h-5 mr-3"></i> Withdraw Funds
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="message-square" class="w-5 h-5 mr-3"></i> Messages
+                </a>
+            </nav>
+            <div class="p-4 border-t border-blue-800">
+                <a href="index.html" class="flex items-center px-4 py-2.5 mt-2 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5 mr-3"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <button id="menu-toggle" class="md:hidden text-primary">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h1 class="text-xl font-bold text-primary font-heading">Translator Dashboard</h1>
+                <div class="flex items-center">
+                    <div class="text-right mr-4">
+                        <p class="font-semibold text-gray-700">M. Rahman</p>
+                        <p class="text-xs text-secondary-dark font-bold">VERIFIED <i data-lucide="shield-check" class="inline w-4 h-4 text-secondary"></i></p>
+                    </div>
+                    <img src="https://placehold.co/40x40/00ADEF/FFFFFF?text=MR" alt="User" class="w-10 h-10 rounded-full">
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-8">
+                <!-- Verification Alert -->
+                <div class="bg-danger/10 border-l-4 border-danger text-danger-700 p-4 rounded-lg mb-6" role="alert">
+                  <p class="font-bold">Action Required</p>
+                  <p>Your KYC verification is pending. Please upload your NID/Passport to start receiving orders.</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-5 rounded-lg shadow flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">Pending Orders</p>
+                            <p class="text-2xl font-bold text-primary">3</p>
+                        </div>
+                        <div class="bg-accent/10 text-accent p-3 rounded-full"><i data-lucide="package-search" class="w-6 h-6"></i></div>
+                    </div>
+                     <div class="bg-white p-5 rounded-lg shadow flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">Completed This Month</p>
+                            <p class="text-2xl font-bold text-primary">12</p>
+                        </div>
+                        <div class="bg-success/10 text-success p-3 rounded-full"><i data-lucide="check-circle" class="w-6 h-6"></i></div>
+                    </div>
+                     <div class="bg-white p-5 rounded-lg shadow flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">Total Earnings</p>
+                            <p class="text-2xl font-bold text-primary">BDT 25,500</p>
+                        </div>
+                        <div class="bg-primary/10 text-primary p-3 rounded-full"><i data-lucide="bar-chart-2" class="w-6 h-6"></i></div>
+                    </div>
+                     <div class="bg-white p-5 rounded-lg shadow flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">Your Rating</p>
+                            <p class="text-2xl font-bold text-primary">4.9 <span class="text-secondary">&#9733;</span></p>
+                        </div>
+                        <div class="bg-secondary/20 text-secondary p-3 rounded-full"><i data-lucide="star" class="w-6 h-6"></i></div>
+                    </div>
+                </div>
+
+                <!-- Pending Orders Table -->
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold font-heading text-primary mb-6">Pending Orders List</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="py-3 px-4 font-semibold">Order ID</th>
+                                    <th class="py-3 px-4 font-semibold">Service</th>
+                                    <th class="py-3 px-4 font-semibold">Deadline</th>
+                                    <th class="py-3 px-4 font-semibold">Status</th>
+                                    <th class="py-3 px-4 font-semibold">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Order Row -->
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="py-4 px-4 font-semibold text-primary">#BL-84325</td>
+                                    <td class="py-4 px-4">Legal Document (Bangla → Eng)</td>
+                                    <td class="py-4 px-4">2 days</td>
+                                    <td class="py-4 px-4"><span class="bg-accent/20 text-accent font-bold text-xs py-1 px-2 rounded-full">New</span></td>
+                                    <td class="py-4 px-4">
+                                        <button class="bg-success text-white px-3 py-1 rounded-lg text-sm font-semibold hover:bg-green-600">Accept</button>
+                                        <button class="bg-danger text-white px-3 py-1 rounded-lg text-sm font-semibold hover:bg-red-600 ml-2">Decline</button>
+                                    </td>
+                                </tr>
+                                <!-- Order Row -->
+                                <tr class="border-b hover:bg-gray-50">
+                                    <td class="py-4 px-4 font-semibold text-primary">#BL-84321</td>
+                                    <td class="py-4 px-4">NID Translation (Bangla → Eng)</td>
+                                    <td class="py-4 px-4">1 day</td>
+                                    <td class="py-4 px-4"><span class="bg-primary/20 text-primary font-bold text-xs py-1 px-2 rounded-full">In Progress</span></td>
+                                    <td class="py-4 px-4">
+                                        <button class="bg-primary text-white px-3 py-1 rounded-lg text-sm font-semibold hover:bg-blue-900">Upload Work</button>
+                                    </td>
+                                </tr>
+                                <!-- Order Row -->
+                                 <tr class="border-b hover:bg-gray-50">
+                                    <td class="py-4 px-4 font-semibold text-primary">#BL-84310</td>
+                                    <td class="py-4 px-4">Academic Transcript (Eng → Bangla)</td>
+                                    <td class="py-4 px-4">3 days</td>
+                                    <td class="py-4 px-4"><span class="bg-accent/20 text-accent font-bold text-xs py-1 px-2 rounded-full">New</span></td>
+                                    <td class="py-4 px-4">
+                                        <button class="bg-success text-white px-3 py-1 rounded-lg text-sm font-semibold hover:bg-green-600">Accept</button>
+                                        <button class="bg-danger text-white px-3 py-1 rounded-lg text-sm font-semibold hover:bg-red-600 ml-2">Decline</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Lucide Icons activation
+        lucide.createIcons();
+
+        // Mobile Sidebar Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
+
+</body>
+</html>

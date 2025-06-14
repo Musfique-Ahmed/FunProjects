@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - BongoLingo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins & Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#003B73', // Deep Navy Blue
+                        'accent': '#00ADEF',  // Sky Blue
+                        'secondary': '#FFD700',// Gold / Trust
+                        'light-bg': '#F9F9F9',
+                        'success': '#10B981', // Green
+                        'warning': '#F59E0B', // Amber
+                    },
+                    fontFamily: {
+                        'sans': ['Open Sans', 'sans-serif'],
+                        'heading': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #003B73;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #005eb8;
+        }
+    </style>
+</head>
+<body class="bg-light-bg font-sans">
+
+    <div id="app" class="flex h-screen bg-light-bg">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-primary text-white flex flex-col transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0">
+            <div class="p-6 text-center border-b border-blue-800">
+                <a href="index.html" class="font-heading text-2xl font-bold">BongoLingo</a>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="flex items-center px-4 py-2.5 bg-accent/20 rounded-lg text-white font-semibold">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="plus-circle" class="w-5 h-5 mr-3"></i> Place New Order
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="package" class="w-5 h-5 mr-3"></i> My Orders
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="message-square" class="w-5 h-5 mr-3"></i> Messages
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i> Payments & Invoices
+                </a>
+                <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="user-circle" class="w-5 h-5 mr-3"></i> My Profile
+                </a>
+            </nav>
+            <div class="p-4 border-t border-blue-800">
+                 <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="life-buoy" class="w-5 h-5 mr-3"></i> Support
+                </a>
+                <a href="index.html" class="flex items-center px-4 py-2.5 mt-2 text-gray-300 hover:bg-white/10 rounded-lg transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5 mr-3"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <button id="menu-toggle" class="md:hidden text-primary">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h1 class="text-xl font-bold text-primary font-heading">Client Dashboard</h1>
+                <div class="flex items-center">
+                    <span class="mr-4 font-semibold text-gray-700">Welcome, A. Khan!</span>
+                    <img src="https://placehold.co/40x40/003B73/FFFFFF?text=AK" alt="User" class="w-10 h-10 rounded-full">
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Left Column: New Order -->
+                    <div class="lg:col-span-2 space-y-8">
+                        <!-- New Order Card -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                            <h2 class="text-2xl font-bold font-heading text-primary mb-6">Place a New Order</h2>
+                            
+                            <!-- Step 1: Upload Documents -->
+                            <div>
+                                <label class="font-semibold text-gray-700">1. Upload Your Documents</label>
+                                <div id="drop-zone" class="mt-2 flex justify-center items-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:border-accent transition-colors">
+                                    <div class="flex flex-col items-center">
+                                        <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400"></i>
+                                        <p class="mt-2 text-gray-600">Drag & drop files here, or <span class="font-semibold text-accent">click to browse</span></p>
+                                        <p class="text-xs text-gray-400 mt-1">PDF, DOCX, JPG, PNG supported</p>
+                                        <input type="file" id="file-input" multiple class="hidden">
+                                    </div>
+                                </div>
+                                <div id="file-list" class="mt-3 text-sm"></div>
+                            </div>
+                            
+                            <!-- Step 2: Service Details -->
+                            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="language-pair" class="block font-semibold text-gray-700 mb-1">2. Language Pair</label>
+                                    <select id="language-pair" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:outline-none">
+                                        <option>Bangla → English</option>
+                                        <option>English → Bangla</option>
+                                        <option>Arabic → English</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="doc-type" class="block font-semibold text-gray-700 mb-1">3. Type of Document</label>
+                                    <select id="doc-type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:outline-none">
+                                        <option>Visa Document</option>
+                                        <option>Legal Document</option>
+                                        <option>Medical Report</option>
+                                        <option>Academic Certificate</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Delivery & Assignment -->
+                             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block font-semibold text-gray-700 mb-2">4. Delivery Time</label>
+                                    <div class="flex space-x-4">
+                                        <label class="flex items-center p-3 border border-gray-300 rounded-lg flex-1 cursor-pointer has-[:checked]:bg-accent/10 has-[:checked]:border-accent">
+                                            <input type="radio" name="delivery" class="form-radio text-accent focus:ring-accent" checked>
+                                            <span class="ml-2">Normal</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border border-gray-300 rounded-lg flex-1 cursor-pointer has-[:checked]:bg-accent/10 has-[:checked]:border-accent">
+                                            <input type="radio" name="delivery" class="form-radio text-accent focus:ring-accent">
+                                            <span class="ml-2">Express (+Fee)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block font-semibold text-gray-700 mb-2">5. Translator</label>
+                                    <div class="flex space-x-4">
+                                        <label class="flex items-center p-3 border border-gray-300 rounded-lg flex-1 cursor-pointer has-[:checked]:bg-accent/10 has-[:checked]:border-accent">
+                                            <input type="radio" name="translator" class="form-radio text-accent focus:ring-accent" checked>
+                                            <span class="ml-2">Auto-Assign</span>
+                                        </label>
+                                         <label class="flex items-center p-3 border border-gray-300 rounded-lg flex-1 cursor-pointer has-[:checked]:bg-accent/10 has-[:checked]:border-accent">
+                                            <input type="radio" name="translator" class="form-radio text-accent focus:ring-accent">
+                                            <span class="ml-2">Select Manually</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Orders Card -->
+                        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                             <h2 class="text-2xl font-bold font-heading text-primary mb-6">My Active Orders</h2>
+                             <div class="space-y-4">
+                                <!-- Order Item -->
+                                <div class="border rounded-lg p-4">
+                                    <div class="flex flex-wrap justify-between items-center">
+                                        <div>
+                                            <p class="font-bold text-primary">Order #BL-84321</p>
+                                            <p class="text-sm text-gray-500">NID & Birth Certificate Translation</p>
+                                        </div>
+                                        <div class="text-sm font-semibold text-warning-600 bg-warning/10 px-3 py-1 rounded-full mt-2 sm:mt-0">In Progress</div>
+                                        <a href="#" class="text-accent font-semibold mt-2 sm:mt-0">View Details</a>
+                                    </div>
+                                    <!-- Status Timeline -->
+                                    <div class="mt-4 flex items-center space-x-2 text-xs text-gray-500">
+                                        <span class="text-success flex items-center"><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>Assigned</span> <span class="text-gray-400">&rarr;</span>
+                                        <span class="font-bold text-primary flex items-center"><i data-lucide="loader" class="w-4 h-4 mr-1 animate-spin"></i>In Progress</span> <span class="text-gray-400">&rarr;</span>
+                                        <span>Completed</span> <span class="text-gray-400">&rarr;</span>
+                                        <span>Delivered</span>
+                                    </div>
+                                </div>
+                                <!-- Order Item -->
+                                <div class="border rounded-lg p-4">
+                                     <div class="flex flex-wrap justify-between items-center">
+                                        <div>
+                                            <p class="font-bold text-primary">Order #BL-84199</p>
+                                            <p class="text-sm text-gray-500">Academic Transcript Translation</p>
+                                        </div>
+                                        <div class="text-sm font-semibold text-success bg-success/10 px-3 py-1 rounded-full mt-2 sm:mt-0">Completed</div>
+                                        <a href="#" class="bg-primary text-white text-sm px-4 py-1.5 rounded-lg hover:bg-blue-900 transition-colors mt-2 sm:mt-0">Download</a>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Pricing & Payment -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white p-6 rounded-xl shadow-lg sticky top-24">
+                            <h3 class="text-xl font-bold font-heading text-primary mb-4">Pricing & Payment</h3>
+                            <div class="space-y-3 text-gray-700">
+                                <div class="flex justify-between"><span>Base Price:</span><span class="font-semibold">BDT 500.00</span></div>
+                                <div class="flex justify-between"><span>Express Fee:</span><span class="font-semibold">BDT 0.00</span></div>
+                                <div class="flex justify-between"><span>VAT (5%):</span><span class="font-semibold">BDT 25.00</span></div>
+                            </div>
+                            <hr class="my-4">
+                            <div class="flex justify-between text-lg font-bold text-primary">
+                                <span>Total:</span>
+                                <span>BDT 525.00</span>
+                            </div>
+                            <button class="w-full mt-6 bg-accent hover:bg-sky-500 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                                Proceed to Secure Payment
+                            </button>
+                            <p class="text-xs text-center text-gray-500 mt-4">Pay with</p>
+                            <div class="flex justify-center items-center space-x-4 mt-2">
+                                <img src="https://placehold.co/40x25/ffffff/000000?text=bKash" alt="bKash" class="h-6">
+                                <img src="https://placehold.co/40x25/ffffff/000000?text=Nagad" alt="Nagad" class="h-6">
+                                <img src="https://placehold.co/40x25/ffffff/000000?text=VISA" alt="Visa" class="h-6">
+                                <img src="https://placehold.co/40x25/ffffff/000000?text=MC" alt="Mastercard" class="h-6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Lucide Icons activation
+        lucide.createIcons();
+
+        // Mobile Sidebar Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // File Upload Logic
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-accent');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-accent');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-accent');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            fileList.innerHTML = ''; // Clear previous list
+            if(files.length > 0) {
+                 const list = document.createElement('ul');
+                 list.className = 'list-disc list-inside text-gray-600';
+                 for(const file of files) {
+                    const li = document.createElement('li');
+                    li.textContent = `${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                    list.appendChild(li);
+                 }
+                 fileList.appendChild(list);
+            }
+        }
+    </script>
+
+</body>
+</html>
