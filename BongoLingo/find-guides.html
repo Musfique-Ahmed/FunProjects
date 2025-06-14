@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Guides - BongoLingo</title>
+    <title>Find a Guide - BongoLingo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,7 @@
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-white font-sans">
+<body class="bg-light-bg font-sans">
 
     <!-- Header -->
     <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
@@ -37,9 +37,9 @@
                 <a href="index.html" class="font-heading text-2xl font-bold text-primary">BongoLingo</a>
                 <nav class="hidden md:flex items-center space-x-6">
                     <a href="index.html" class="text-gray-700 hover:text-accent">Home</a>
-                    <a href="index.html#services" class="text-gray-700 hover:text-accent">Services</a>
+                    <a href="find-guides.html" class="text-accent font-semibold">Find a Guide</a>
                     <a href="for-translators.html" class="text-gray-700 hover:text-accent">For Translators</a>
-                    <a href="for-guides.html" class="text-accent font-semibold">For Guides</a>
+                    <a href="for-guides.html" class="text-gray-700 hover:text-accent">For Guides</a>
                     <a href="pricing.html" class="text-gray-700 hover:text-accent">Pricing</a>
                     <a href="blog.html" class="text-gray-700 hover:text-accent">Blog</a>
                     <a href="contact.html" class="text-gray-700 hover:text-accent">Contact</a>
@@ -52,62 +52,121 @@
             </div>
         </div>
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="index.html" class="block py-2">Home</a>
-            <a href="for-translators.html" class="block py-2">For Translators</a>
-            <a href="for-guides.html" class="block py-2 text-accent font-semibold">For Guides</a>
-            <a href="pricing.html" class="block py-2">Pricing</a>
-            <a href="blog.html" class="block py-2">Blog</a>
-            <a href="contact.html" class="block py-2">Contact</a>
+             <a href="index.html" class="block py-2">Home</a>
+             <a href="find-guides.html" class="block py-2 text-accent font-semibold">Find a Guide</a>
+             <a href="for-translators.html" class="block py-2">For Translators</a>
+             <a href="for-guides.html" class="block py-2">For Guides</a>
+             <a href="pricing.html" class="block py-2">Pricing</a>
+             <a href="blog.html" class="block py-2">Blog</a>
+             <a href="contact.html" class="block py-2">Contact</a>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-16">
-        <h1 class="text-4xl font-heading font-bold text-primary text-center">Become a Trusted Local Guide</h1>
-        <p class="text-xl text-gray-600 text-center mt-4 max-w-3xl mx-auto">Showcase your city, share your knowledge, and earn by guiding tourists, business travelers, and visitors. Join our network of verified guides.</p>
-        <div class="text-center mt-8">
-             <a href="signup.html" class="bg-primary hover:bg-blue-900 text-white font-bold text-lg py-4 px-10 rounded-lg">Become a Guide</a>
+    <main class="container mx-auto px-6 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-heading font-bold text-primary">Find Your Perfect Guide in Bangladesh</h1>
+            <p class="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">Explore with our verified, friendly, and knowledgeable local guides.</p>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="bg-white p-4 rounded-lg shadow-md mb-8 flex flex-col md:flex-row gap-4 items-center">
+            <div class="relative flex-grow w-full">
+                 <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" placeholder="Search by city (e.g., Dhaka, Cox's Bazar)" class="w-full p-3 pl-10 border border-gray-200 rounded-lg focus:ring-2 focus:ring-accent">
+            </div>
+             <div class="relative flex-grow w-full">
+                 <i data-lucide="languages" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <select class="w-full p-3 pl-10 border border-gray-200 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-accent">
+                    <option>Any Language</option>
+                    <option>English</option>
+                    <option>Bengali</option>
+                    <option>Japanese</option>
+                    <option>Korean</option>
+                </select>
+             </div>
+            <button class="bg-primary text-white font-bold py-3 px-6 rounded-lg w-full md:w-auto">Search</button>
+        </div>
+
+        <!-- Guides Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Guide Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                <img src="https://placehold.co/400x300/003B73/FFFFFF?text=Fatima+I." alt="Guide Fatima" class="w-full h-56 object-cover">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-heading font-bold text-primary">Fatima Islam</h3>
+                        <div class="flex items-center text-secondary font-bold">
+                            <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                            <span class="ml-1">5.0</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-3">Languages: English, Bengali</p>
+                    <p class="text-gray-600 mb-4">"Let me show you the hidden gems and culinary delights of Old Dhaka!"</p>
+                    <a href="#" class="w-full text-center bg-accent hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-lg block">View Profile & Book</a>
+                </div>
+            </div>
+            <!-- Guide Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                <img src="https://placehold.co/400x300/00ADEF/FFFFFF?text=Karim+C." alt="Guide Karim" class="w-full h-56 object-cover">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-heading font-bold text-primary">Karim Chowdhury</h3>
+                        <div class="flex items-center text-secondary font-bold">
+                            <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                            <span class="ml-1">4.9</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-3">Languages: English, Japanese</p>
+                    <p class="text-gray-600 mb-4">"Experience the natural beauty of Sreemangal's tea gardens with me."</p>
+                    <a href="#" class="w-full text-center bg-accent hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-lg block">View Profile & Book</a>
+                </div>
+            </div>
+             <!-- Guide Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                <img src="https://placehold.co/400x300/FFD700/000000?text=Sadia+A." alt="Guide Sadia" class="w-full h-56 object-cover">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-heading font-bold text-primary">Sadia Ahmed</h3>
+                        <div class="flex items-center text-secondary font-bold">
+                            <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                            <span class="ml-1">4.8</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-3">Languages: English, Bengali, Korean</p>
+                    <p class="text-gray-600 mb-4">"Historical and architectural tours are my specialty. Let's explore!"</p>
+                    <a href="#" class="w-full text-center bg-accent hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-lg block">View Profile & Book</a>
+                </div>
+            </div>
+             <!-- Guide Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                <img src="https://placehold.co/400x300/10B981/FFFFFF?text=Rohan+M." alt="Guide Rohan" class="w-full h-56 object-cover">
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-heading font-bold text-primary">Rohan Mahmud</h3>
+                        <div class="flex items-center text-secondary font-bold">
+                            <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                            <span class="ml-1">5.0</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-3">Languages: English, Bengali</p>
+                    <p class="text-gray-600 mb-4">"Adventure awaits! Let's go trekking in the Chittagong Hill Tracts."</p>
+                    <a href="#" class="w-full text-center bg-accent hover:bg-sky-500 text-white font-bold py-2 px-4 rounded-lg block">View Profile & Book</a>
+                </div>
+            </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-primary text-white">
+    <footer class="bg-primary text-white mt-12">
         <div class="container mx-auto px-6 py-12">
              <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="font-heading text-xl font-bold mb-4">BongoLingo</h3>
-                    <p class="text-gray-300">Certified Translation. Trusted Guides.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="index.html#services" class="text-gray-300 hover:text-white">Services</a></li>
-                        <li><a href="pricing.html" class="text-gray-300 hover:text-white">Pricing</a></li>
-                        <li><a href="blog.html" class="text-gray-300 hover:text-white">Blog</a></li>
-                        <li><a href="contact.html" class="text-gray-300 hover:text-white">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                     <h4 class="font-semibold text-lg mb-4">Legal</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white">Refund Policy</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="facebook"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="twitter"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-white"><i data-lucide="linkedin"></i></a>
-                    </div>
-                </div>
+                <div><h3 class="font-heading text-xl font-bold mb-4">BongoLingo</h3><p class="text-gray-300">Certified Translation. Trusted Guides.</p></div>
+                <div><h4 class="font-semibold text-lg mb-4">Quick Links</h4><ul class="space-y-2"><li><a href="index.html#services" class="text-gray-300 hover:text-white">Services</a></li><li><a href="pricing.html" class="text-gray-300 hover:text-white">Pricing</a></li><li><a href="blog.html" class="text-gray-300 hover:text-white">Blog</a></li><li><a href="contact.html" class="text-gray-300 hover:text-white">Contact Us</a></li></ul></div>
+                <div><h4 class="font-semibold text-lg mb-4">Legal</h4><ul class="space-y-2"><li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li><li><a href="#" class="text-gray-300 hover:text-white">Terms of Service</a></li><li><a href="#" class="text-gray-300 hover:text-white">Privacy Policy</a></li><li><a href="#" class="text-gray-300 hover:text-white">Refund Policy</a></li></ul></div>
+                <div><h4 class="font-semibold text-lg mb-4">Follow Us</h4><div class="flex space-x-4"><a href="#" class="text-gray-300 hover:text-white"><i data-lucide="facebook"></i></a><a href="#" class="text-gray-300 hover:text-white"><i data-lucide="twitter"></i></a><a href="#" class="text-gray-300 hover:text-white"><i data-lucide="linkedin"></i></a></div></div>
             </div>
-            <div class="mt-12 border-t border-gray-700 pt-6 text-center text-gray-400 text-sm">
-                &copy; <span id="current-year"></span> BongoLingo. All Rights Reserved.
-            </div>
+            <div class="mt-12 border-t border-gray-700 pt-6 text-center text-gray-400 text-sm">&copy; <span id="current-year"></span> BongoLingo. All Rights Reserved.</div>
         </div>
     </footer>
 
